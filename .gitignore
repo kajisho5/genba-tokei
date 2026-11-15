@@ -1,0 +1,10 @@
+# XcodeGen が生成するもの（project.yml から毎回作る）
+*.xcodeproj/
+# ビルド成果物
+build/
+DerivedData/
+*.xcarchive
+*.ipa
+# 秘密鍵（絶対にコミットしない）
+*.p8
+.DS_Store
