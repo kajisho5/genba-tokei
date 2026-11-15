@@ -30,6 +30,16 @@ final class TimeSyncStore {
 
     func now(_ system: Date = Date()) -> Date { system.addingTimeInterval(offset) }
 
+    /// App Store の画面写真用（起動引数 -demo）：撮影環境は時刻サーバーにつながらないので、補正済みの見本にする
+    static let isDemo = ProcessInfo.processInfo.arguments.contains("-demo")
+
+    func applyDemo() {
+        offset = 0.012
+        accuracy = 0.012
+        syncedAt = Date()
+        lastError = nil
+    }
+
     func status(at date: Date = Date()) -> Status {
         guard let syncedAt else { return .unsynced }
         return date.timeIntervalSince(syncedAt) < 3600 ? .ok : .stale
@@ -41,6 +51,7 @@ final class TimeSyncStore {
     }
 
     func sync() async {
+        if Self.isDemo { applyDemo(); return }
         guard !isSyncing else { return }
         isSyncing = true
         defer { isSyncing = false }

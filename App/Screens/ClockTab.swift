@@ -134,7 +134,7 @@ struct ClockTab: View {
                 }
                 .buttonStyle(.plain)
             }
-            if let m = model.pip.message ?? model.island.message {
+            if !TimeSyncStore.isDemo, let m = model.pip.message ?? model.island.message {
                 Text(m).font(.footnote).foregroundStyle(Palette.danger)
             }
         }
