@@ -72,6 +72,20 @@ struct SyncDot: View {
     }
 }
 
+/// 左端の記号：時計は補正状態の点、カウントダウンは砂時計、ストップウォッチはストップウォッチ
+struct ModeMark: View {
+    let state: GenbaActivityAttributes.ContentState
+    var body: some View {
+        if state.mode == .clock {
+            SyncDot(accuracyMs: state.accuracyMs)
+        } else {
+            Image(systemName: state.mode == .countdown ? "hourglass" : "stopwatch")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Palette.accent)
+        }
+    }
+}
+
 private func modeTitle(_ state: GenbaActivityAttributes.ContentState) -> String {
     switch state.mode {
     case .clock: "現在時刻"
@@ -107,15 +121,23 @@ struct GenbaLiveActivity: Widget {
                         .frame(maxWidth: .infinity)
                 }
             } compactLeading: {
-                if context.state.mode == .clock {
-                    SyncDot(accuracyMs: context.state.accuracyMs)
+                if context.state.leadingOnly ?? true {
+                    // 左側だけ：記号＋時刻（右側は空にすると OS が自動で隠す）
+                    HStack(spacing: 4) {
+                        ModeMark(state: context.state)
+                        LiveTimeText(state: context.state, size: 14)
+                    }
+                    .frame(maxWidth: 130, alignment: .leading)
                 } else {
-                    Image(systemName: context.state.mode == .countdown ? "hourglass" : "stopwatch")
-                        .foregroundStyle(Palette.accent)
+                    ModeMark(state: context.state)
                 }
             } compactTrailing: {
-                LiveTimeText(state: context.state, size: 14)
-                    .frame(maxWidth: 110)
+                if context.state.leadingOnly ?? true {
+                    EmptyView()
+                } else {
+                    LiveTimeText(state: context.state, size: 14)
+                        .frame(maxWidth: 110)
+                }
             } minimal: {
                 Image(systemName: context.state.mode == .countdown ? "hourglass" : "clock")
                     .foregroundStyle(Palette.accent)

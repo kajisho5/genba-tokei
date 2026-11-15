@@ -25,6 +25,7 @@ final class LiveActivityController {
         var offset: TimeInterval
         var accuracyMs: Int?
         var precision: DisplayPrecision
+        var leadingOnly: Bool
         var countdown: CountdownState
         var stopwatch: StopwatchState
     }
@@ -71,7 +72,8 @@ final class LiveActivityController {
             mode: mode,
             stopwatchStart: ClockMath.stopwatchStart(systemNow: now, offset: i.offset),
             precision: i.precision,
-            accuracyMs: i.accuracyMs
+            accuracyMs: i.accuracyMs,
+            leadingOnly: i.leadingOnly
         )
         switch mode {
         case .clock:

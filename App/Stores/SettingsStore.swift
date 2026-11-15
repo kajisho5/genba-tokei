@@ -17,6 +17,7 @@ final class SettingsStore {
     var showsDate: Bool { didSet { save(showsDate, "showsDate") } }
     var revealGesture: RevealGesture { didSet { save(revealGesture.rawValue, "revealGesture") } }
     var islandPrecision: DisplayPrecision { didSet { save(islandPrecision.rawValue, "islandPrecision") } }
+    var islandLeadingOnly: Bool { didSet { save(islandLeadingOnly, "islandLeadingOnly") } }
     var keepsScreenOn: Bool { didSet { save(keepsScreenOn, "keepsScreenOn") } }
     var plays0Sound: Bool { didSet { save(plays0Sound, "plays0Sound") } }
 
@@ -27,7 +28,7 @@ final class SettingsStore {
         d.register(defaults: [
             "startsInClockOnly": true, "showsFraction": true, "showsSyncDot": true, "showsDate": false,
             "revealGesture": RevealGesture.tap.rawValue, "islandPrecision": DisplayPrecision.centiseconds.rawValue,
-            "keepsScreenOn": true, "plays0Sound": true,
+            "keepsScreenOn": true, "plays0Sound": true, "islandLeadingOnly": true,
         ])
         startsInClockOnly = d.bool(forKey: "startsInClockOnly")
         showsFraction = d.bool(forKey: "showsFraction")
@@ -36,6 +37,7 @@ final class SettingsStore {
         revealGesture = RevealGesture(rawValue: d.string(forKey: "revealGesture") ?? "") ?? .tap
         islandPrecision = DisplayPrecision(rawValue: d.string(forKey: "islandPrecision") ?? "") ?? .centiseconds
         keepsScreenOn = d.bool(forKey: "keepsScreenOn")
+        islandLeadingOnly = d.bool(forKey: "islandLeadingOnly")
         plays0Sound = d.bool(forKey: "plays0Sound")
     }
 

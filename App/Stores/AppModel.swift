@@ -34,7 +34,7 @@ final class AppModel {
 
     var islandInputs: LiveActivityController.Inputs {
         .init(offset: sync.offset, accuracyMs: sync.accuracyMs, precision: settings.islandPrecision,
-              countdown: timers.countdown, stopwatch: timers.stopwatch)
+              leadingOnly: settings.islandLeadingOnly, countdown: timers.countdown, stopwatch: timers.stopwatch)
     }
 
     func toggleIsland(_ mode: LiveActivityController.Mode) async {

@@ -24,8 +24,12 @@ struct SettingsView: View {
                     Picker("Dynamic Island の細かさ", selection: $settings.islandPrecision) {
                         ForEach(DisplayPrecision.allCases) { Text($0.label).tag($0) }
                     }
+                    Picker("Dynamic Island の表示位置", selection: $settings.islandLeadingOnly) {
+                        Text("左だけ").tag(true)
+                        Text("左右に分ける").tag(false)
+                    }
                 } footer: {
-                    Text("画面が消えている間は、OS の都合で秒より細かい表示が止まることがあります。")
+                    Text("「左だけ」は右側を空けるので、電池残量や電波が隠れません。画面が消えている間は、OS の都合で秒より細かい表示が止まることがあります。")
                 }
                 Section {
                     Toggle("画面をスリープさせない", isOn: $settings.keepsScreenOn)
@@ -51,6 +55,7 @@ struct SettingsView: View {
             }
             .onChange(of: settings.keepsScreenOn) { _, _ in model.applyScreenOn() }
             .onChange(of: settings.islandPrecision) { _, _ in model.pushOutputs() }
+            .onChange(of: settings.islandLeadingOnly) { _, _ in model.pushOutputs() }
             .onChange(of: settings.showsFraction) { _, _ in model.pushOutputs() }
         }
     }
