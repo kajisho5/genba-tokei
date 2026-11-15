@@ -24,12 +24,11 @@ struct SettingsView: View {
                     Picker("Dynamic Island の細かさ", selection: $settings.islandPrecision) {
                         ForEach(DisplayPrecision.allCases) { Text($0.label).tag($0) }
                     }
-                    Picker("Dynamic Island の並び", selection: $settings.islandLeadingOnly) {
-                        Text("左に時刻・右に電池").tag(true)
-                        Text("左に点・右に時刻").tag(false)
+                    Picker("Dynamic Island の並び", selection: $settings.islandLayout) {
+                        ForEach(IslandLayout.allCases) { Text($0.label).tag($0) }
                     }
                 } footer: {
-                    Text("島は左右対称に広がるため、時刻を出すと電池・電波の表示が隠れます。「右に電池」は電池残量を島の中に出します（アプリが動いている間だけ更新し、15 分更新がないと消えます）。電波の強さは Apple が取得手段を公開していないため出せません。")
+                    Text("島は左右対称に広がるため、時刻を全部出すと本体の電波・電池が隠れます。「秒と1/100秒だけ」は島が狭いので本体の時刻・電波・電池が見えます（時:分は左上の本体の時刻で読む）。「右に電池」は電池残量を島の中に出します（アプリが動いている間だけ更新し、15 分更新がないと消えます）。")
                 }
                 Section {
                     Toggle("画面をスリープさせない", isOn: $settings.keepsScreenOn)
@@ -55,7 +54,7 @@ struct SettingsView: View {
             }
             .onChange(of: settings.keepsScreenOn) { _, _ in model.applyScreenOn() }
             .onChange(of: settings.islandPrecision) { _, _ in model.pushOutputs() }
-            .onChange(of: settings.islandLeadingOnly) { _, _ in model.pushOutputs() }
+            .onChange(of: settings.islandLayout) { _, _ in model.pushOutputs() }
             .onChange(of: settings.showsFraction) { _, _ in model.pushOutputs() }
         }
     }

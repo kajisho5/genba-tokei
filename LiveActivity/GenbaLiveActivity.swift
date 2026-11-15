@@ -9,13 +9,15 @@ import WidgetKit
 struct LiveTimeText: View {
     let state: GenbaActivityAttributes.ContentState
     let size: CGFloat
+    /// 枠に合わせて文字を縮めるか（切り抜き表示の時は縮めない）
+    var scales = true
 
     var body: some View {
         content
             .font(.system(size: size, weight: .semibold).monospacedDigit())
             .foregroundStyle(color)
             .lineLimit(1)
-            .minimumScaleFactor(0.5)
+            .minimumScaleFactor(scales ? 0.5 : 1)
     }
 
     @ViewBuilder private var content: some View {
@@ -69,6 +71,34 @@ struct SyncDot: View {
         Circle()
             .fill(accuracyMs == nil ? Palette.danger : Palette.ok)
             .frame(width: 8, height: 8)
+    }
+}
+
+/// 「:36.47」だけを見せる。OS の標準表示には「秒だけ」の形式がないので、
+/// 補正済みの時刻（時:分:秒.1/100）を描いて、右端の幅だけ切り抜く。
+struct SecondsOnlyText: View {
+    let state: GenbaActivityAttributes.ContentState
+    let size: CGFloat
+
+    var body: some View {
+        // 見本の文字で幅を決める（数字は等幅なので「:00.00」と同じ幅になる）
+        Text(template)
+            .font(.system(size: size, weight: .semibold).monospacedDigit())
+            .hidden()
+            .overlay(alignment: .trailing) {
+                LiveTimeText(state: state, size: size, scales: false)
+                    .fixedSize()
+            }
+            .clipped()
+            .accessibilityLabel("現在の秒")
+    }
+
+    private var template: String {
+        switch state.precision {
+        case .centiseconds: ":00.00"
+        case .deciseconds: ":00.0"
+        case .seconds: ":00"
+        }
     }
 }
 
@@ -148,8 +178,8 @@ struct GenbaLiveActivity: Widget {
                         .frame(maxWidth: .infinity)
                 }
             } compactLeading: {
-                if context.state.leadingOnly ?? true {
-                    // 左側だけ：記号＋時刻（右側は空にすると OS が自動で隠す）
+                if context.state.layout == .timeAndBattery {
+                    // 左に記号＋時刻
                     HStack(spacing: 4) {
                         ModeMark(state: context.state)
                         LiveTimeText(state: context.state, size: 14)
@@ -159,14 +189,17 @@ struct GenbaLiveActivity: Widget {
                     ModeMark(state: context.state)
                 }
             } compactTrailing: {
-                if context.state.leadingOnly ?? true {
+                switch context.state.layout ?? .secondsOnly {
+                case .timeAndBattery:
                     // 右側は電池残量。アプリが止まって古くなったら（isStale）出さない
                     if !context.isStale, let percent = context.state.batteryPercent {
                         BatteryMark(percent: percent, charging: context.state.batteryCharging ?? false)
                     } else {
                         EmptyView()
                     }
-                } else {
+                case .secondsOnly where context.state.mode == .clock:
+                    SecondsOnlyText(state: context.state, size: 14)
+                case .secondsOnly, .dotAndTime:
                     LiveTimeText(state: context.state, size: 14)
                         .frame(maxWidth: 110)
                 }

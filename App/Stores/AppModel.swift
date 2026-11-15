@@ -42,7 +42,7 @@ final class AppModel {
 
     var islandInputs: LiveActivityController.Inputs {
         .init(offset: sync.offset, accuracyMs: sync.accuracyMs, precision: settings.islandPrecision,
-              leadingOnly: settings.islandLeadingOnly,
+              layout: settings.islandLayout,
               batteryPercent: Self.batteryPercent, batteryCharging: Self.isCharging, countdown: timers.countdown, stopwatch: timers.stopwatch)
     }
 
