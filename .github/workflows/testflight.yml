@@ -16,6 +16,8 @@ jobs:
       bundle_id: com.seventhwell.GenbaTokei
       project: GenbaTokei.xcodeproj
       scheme: GenbaTokei
+      # Apple Watch アプリを同梱
+      extra_sdks: watchOS
       # .xcodeproj はコミットせず、project.yml から毎回つくる
       pre_build: brew install xcodegen && xcodegen generate
       xcode: "27.2"

@@ -12,7 +12,9 @@ final class TimeSyncStore {
     private(set) var syncedAt: Date?
     private(set) var isSyncing = false
     private(set) var lastError: String?
-    var server = "time.apple.com"
+    var server = "time.apple.com" {
+        didSet { defaults.set(server, forKey: "ntp.server") }
+    }
 
     private let defaults = UserDefaults.standard
 

@@ -4,9 +4,9 @@
 
 | # | 作業 | 誰が | 状態 |
 |---|---|---|---|
-| 1 | Bundle ID を登録（`com.seventhwell.GenbaTokei` と `com.seventhwell.GenbaTokei.LiveActivity`） | Claude（runway の apple-bundle-id） | 実行済み |
+| 1 | Bundle ID を登録（本体 `com.seventhwell.GenbaTokei`、Dynamic Island 部品 `.LiveActivity`、Apple Watch `.watchkitapp`） | Claude（runway の apple-bundle-id） | 実行済み |
 | 2 | Secrets を配る（runway の `repos.txt` に追加） | Claude | 実行済み |
-| 3 | **アプリ記録を作る** | **人** | ↓ |
+| 3 | **アプリ記録を作る** | **人** | 済（名前・Bundle ID の打ち間違いは runway の apple-app-name で修正済み） |
 | 4 | TestFlight に送る（Actions → testflight） | Claude | 3 のあと |
 | 5 | 内部テストのグループ作成・テスター追加 | 自動（送信のあと） | — |
 | 6 | 実機で確認 | 人 | — |
@@ -15,7 +15,8 @@
 Apple が API での作成を許していないため、Web の画面でしか作れない。
 
 1. https://appstoreconnect.apple.com/apps →左上「＋」→「新規 App」
-2. プラットフォーム：iOS ／ 名前：`現場時計`（他人と重複したら `現場時計 試作` など）／ 言語：日本語 ／ バンドル ID：`com.seventhwell.GenbaTokei` を選ぶ ／ SKU：`genbatokei` ／ ユーザアクセス：フルアクセス →「作成」
+2. プラットフォーム：iOS ／ **バンドル ID は本体の `com.seventhwell.GenbaTokei` を選ぶ（`.LiveActivity` や `.watchkitapp` は同梱部品なので選ばない）**
+   ／ ／ 名前：`現場時計`（他人と重複したら `現場時計 試作` など）／ 言語：日本語 ／ バンドル ID：`com.seventhwell.GenbaTokei` を選ぶ ／ SKU：`genbatokei` ／ ユーザアクセス：フルアクセス →「作成」
 3. Claude に「作った」と伝える
 
 ## 6. 実機で確認
