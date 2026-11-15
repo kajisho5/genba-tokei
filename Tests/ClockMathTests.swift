@@ -26,6 +26,12 @@ struct ClockMathTests {
         #expect(p.fraction == ".04")
     }
 
+    @Test func 秒が変わる直前は99で止まり繰り上がらない() {
+        let p = ClockMath.parts(of: date(9, 5, 3, 999_999_000), calendar: tokyo)
+        #expect(p.second == 3)
+        #expect(p.centisecond == 99)
+    }
+
     @Test(arguments: [0.0, 0.5, -0.5, 3.25])
     func ストップウォッチ開始時刻から補正済みの現在時刻が出る(offset: Double) {
         let systemNow = date(12, 0, 0)

@@ -28,7 +28,7 @@ jobs:
           [ -n "$ISSUER" ] || missing="$missing ASC_ISSUER_ID"
           [ -n "$KEY_P8" ] || missing="$missing ASC_KEY_P8"
           if [ -n "$missing" ]; then echo "::error::未設定:$missing"; exit 1; fi
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: 準備（Xcode 選択・プロジェクト生成）
         run: ci/setup.sh
       - name: API キーを一時ファイルに書き出す
@@ -73,7 +73,7 @@ jobs:
       - name: 鍵を消す
         if: always()
         run: rm -rf "$RUNNER_TEMP/keys"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: testflight-logs

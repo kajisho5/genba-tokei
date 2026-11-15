@@ -20,7 +20,9 @@ enum ClockMath {
             hour: c.hour ?? 0,
             minute: c.minute ?? 0,
             second: c.second ?? 0,
-            centisecond: (c.nanosecond ?? 0) / 10_000_000
+            // Date は内部が小数なので 0.04 秒が 0.0399999… になることがある。
+            // マイクロ秒に丸めてから 1/100 秒に切り捨てる。
+            centisecond: min(99, ((c.nanosecond ?? 0) + 500) / 1_000 / 10_000)
         )
     }
 

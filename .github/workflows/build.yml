@@ -21,7 +21,7 @@ jobs:
       BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX || 'com.example' }}
       DEVELOPMENT_TEAM: ""
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - name: 準備（Xcode 選択・プロジェクト生成）
         run: ci/setup.sh
       - name: 自動テスト（シミュレーター）
@@ -43,7 +43,7 @@ jobs:
       - name: 画面写真（シミュレーター）
         if: success()
         run: ci/screenshot.sh
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: build-logs-and-screenshots

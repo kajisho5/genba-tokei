@@ -67,8 +67,9 @@ struct NTPPacketTests {
             t3: base.addingTimeInterval(10.2),
             t4: base.addingTimeInterval(0.3)
         )
-        #expect(abs(s.offset - 10.0) < 1e-9)
-        #expect(abs(s.delay - 0.2) < 1e-9)
-        #expect(abs(s.accuracy - 0.1) < 1e-9)
+        // Date の内部表現（2001 年起点の秒の小数）では 1e-7 秒程度の誤差が出るため 1μs で比べる
+        #expect(abs(s.offset - 10.0) < 1e-6)
+        #expect(abs(s.delay - 0.2) < 1e-6)
+        #expect(abs(s.accuracy - 0.1) < 1e-6)
     }
 }
