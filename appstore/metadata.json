@@ -1,0 +1,18 @@
+{
+  "_説明": "App Store に出す文章（日本語）。kajisho5/runway の apple-appstore ワークフローが読んで App Store Connect に登録する",
+  "locale": "ja",
+  "name": "現場時計",
+  "subtitle": "1/100秒まで、全員が同じ時刻",
+  "primaryCategory": "UTILITIES",
+  "secondaryCategory": "PRODUCTIVITY",
+  "copyright": "2026 SEVENTHWELL",
+  "supportUrl": "https://kajisho5.github.io/genba-tokei/support/",
+  "marketingUrl": "https://kajisho5.github.io/genba-tokei/",
+  "privacyPolicyUrl": "https://kajisho5.github.io/genba-tokei/privacy/",
+  "keywords": "時計,秒,ミリ秒,1/100秒,NTP,時報,正確,現場,舞台,配信,撮影,カウントダウン,ストップウォッチ,タイマー,Dynamic Island,小窓",
+  "promotionalText": "1/100秒まで正確な時刻を、時計だけの大きな画面・Dynamic Island・小窓・Apple Watch で。舞台・配信・撮影の現場向けの時計です。",
+  "description": "舞台袖、配信卓、撮影現場で「全員が同じ時刻」を見るための時計です。\n\nネットの時刻サーバーに問い合わせて端末の時計のずれを測り、1/100秒まで補正して表示します。ずれの量と誤差（±ミリ秒）も画面に出るので、どれだけ正確かが一目で分かります。\n\n■ 時計だけモード\nボタンも文字も消して、時刻だけを画面いっぱいに。横置きで離れた所からも読めます。画面に触れると操作ボタンが3秒だけ出て、誤操作を防ぎます（長押しで開く設定も）。\n\n■ Dynamic Island\nホーム画面や他のアプリを使っている間も、画面上部の島に時刻を表示。「秒と1/100秒だけ」にすれば島が狭くなり、本体の時刻・電波・電池も隠れません。\n\n■ 小窓（ピクチャ・イン・ピクチャ）\n台本や進行表を見ながら、時計を他のアプリの上に浮かべられます。\n\n■ 本番までのカウントダウン\n+1分・+5分・+10分、または時刻を指定。残り5分で黄、1分で赤に変わり、0秒で振動と通知でお知らせ。\n\n■ ストップウォッチ\nラップ付き。最速は緑、最遅は赤で表示し、長押しでコピーできます。\n\n■ Apple Watch\niPhone で測ったずれを受け取って、手首でも同じ時刻。腕を下ろすと秒までの表示になり、残り1分を切ると毎秒コツコツと振動します。\n\n■ その他\n・画面をスリープさせない設定\n・iPad では時計と次の予定を横並びに\n・個人情報は一切集めません\n\n※ 画面が消えている間などは、OSの都合で Dynamic Island の秒より細かい表示が止まることがあります。",
+  "whatsNew": "",
+  "ageRating": "none",
+  "reviewNotes": "ログイン不要です。起動すると「時計だけモード」で開きます。画面に触れて「メニューへ」を押すと、時計・カウントダウン・ストップウォッチのタブに移れます。\n\n・時刻：time.apple.com に NTP（UDP 123）で問い合わせ、端末の時計のずれを補正して1/100秒まで表示します。\n・小窓：時計タブの「小窓で表示」で、時計の映像（AVSampleBufferDisplayLayer に毎秒60コマで描いたもの）をピクチャ・イン・ピクチャで表示します。オーディオのバックグラウンドモードはピクチャ・イン・ピクチャのためだけに使用しています。\n・Live Activity：時計タブの「Dynamic Island」で開始します。\n・Apple Watch アプリは iPhone から時刻のずれとカウントダウンを受け取ります。"
+}

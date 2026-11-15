@@ -116,3 +116,7 @@ schemes:
     test:
       targets:
         - GenbaTokeiTests
+  GenbaTokeiWatch:
+    build:
+      targets:
+        GenbaTokeiWatch: all

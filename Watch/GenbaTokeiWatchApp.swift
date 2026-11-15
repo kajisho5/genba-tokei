@@ -9,7 +9,14 @@ struct GenbaTokeiWatchApp: App {
             WatchRootView()
                 .environment(model)
                 .environment(\.locale, Locale(identifier: "ja_JP"))
-                .onAppear { WatchReceiver.shared.activate(model) }
+                .onAppear {
+                    WatchReceiver.shared.activate(model)
+                    // App Store の画面写真用（起動引数 -demo）
+                    if ProcessInfo.processInfo.arguments.contains("-demo") {
+                        model.receive(WatchMessage(offset: 0, accuracyMs: 12, syncedAt: Date(), countdownLabel: "本番",
+                                                   countdownTarget: Date().addingTimeInterval(25 * 60 + 3.22)))
+                    }
+                }
         }
     }
 }

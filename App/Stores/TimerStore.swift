@@ -101,6 +101,15 @@ final class TimerStore {
         onChange?()
     }
 
+    /// App Store の画面写真用（起動引数 -demo）：本番まで 25 分、ストップウォッチにラップ 3 つ
+    func applyDemo() {
+        let now = correctedNow()
+        countdown = CountdownState(label: "本番", target: now.addingTimeInterval(25 * 60 + 3.22), setAt: now.addingTimeInterval(-20 * 60))
+        let sysNow = Date()
+        stopwatch = StopwatchState(startedAt: sysNow.addingTimeInterval(-207.41), accumulated: 0, laps: [104.14, 62.09])
+        onChange?()
+    }
+
     // MARK: 保存
 
     private func save<T: Encodable>(_ value: T, _ key: String) {
