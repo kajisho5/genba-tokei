@@ -8,6 +8,7 @@ struct GenbaTokeiWatchApp: App {
         WindowGroup {
             WatchRootView()
                 .environment(model)
+                .environment(\.locale, Locale(identifier: "ja_JP"))
                 .onAppear { WatchReceiver.shared.activate(model) }
         }
     }

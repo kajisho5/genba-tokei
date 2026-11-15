@@ -72,6 +72,33 @@ struct SyncDot: View {
     }
 }
 
+/// 電池残量（アイコン＋%）
+struct BatteryMark: View {
+    let percent: Int
+    let charging: Bool
+    var body: some View {
+        HStack(spacing: 3) {
+            Image(systemName: charging ? "battery.100.bolt" : symbol)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(percent <= 20 && !charging ? Palette.danger : Palette.text)
+            Text("\(percent)%")
+                .font(.system(size: 12, weight: .semibold).monospacedDigit())
+                .foregroundStyle(Palette.text)
+        }
+        .accessibilityLabel("電池残量 \(percent)パーセント")
+    }
+
+    private var symbol: String {
+        switch percent {
+        case ..<13: "battery.0"
+        case ..<38: "battery.25"
+        case ..<63: "battery.50"
+        case ..<88: "battery.75"
+        default: "battery.100"
+        }
+    }
+}
+
 /// 左端の記号：時計は補正状態の点、カウントダウンは砂時計、ストップウォッチはストップウォッチ
 struct ModeMark: View {
     let state: GenbaActivityAttributes.ContentState
@@ -133,7 +160,12 @@ struct GenbaLiveActivity: Widget {
                 }
             } compactTrailing: {
                 if context.state.leadingOnly ?? true {
-                    EmptyView()
+                    // 右側は電池残量。アプリが止まって古くなったら（isStale）出さない
+                    if !context.isStale, let percent = context.state.batteryPercent {
+                        BatteryMark(percent: percent, charging: context.state.batteryCharging ?? false)
+                    } else {
+                        EmptyView()
+                    }
                 } else {
                     LiveTimeText(state: context.state, size: 14)
                         .frame(maxWidth: 110)

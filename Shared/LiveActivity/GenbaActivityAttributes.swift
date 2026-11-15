@@ -20,8 +20,11 @@ struct GenbaActivityAttributes: ActivityAttributes {
         var precision: DisplayPrecision
         /// NTP の誤差（ミリ秒）。未補正なら nil
         var accuracyMs: Int?
-        /// true：Dynamic Island の左側だけに出す（右の電池・電波を隠さない）
+        /// true：左に時刻、右に電池残量（false：左に点、右に時刻）
         var leadingOnly: Bool?
+        /// 電池残量（%）と充電中か。アプリが動いている間だけ更新される（古くなったら表示しない）
+        var batteryPercent: Int?
+        var batteryCharging: Bool?
     }
 }
 #endif

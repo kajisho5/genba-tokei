@@ -18,6 +18,14 @@ final class AppModel {
         timers.playsSound = { [unowned self] in self.settings.plays0Sound }
         timers.onChange = { [weak self] in self?.pushOutputs() }
         WatchLink.shared.activate()
+        // 電池残量が変わったら Dynamic Island に反映（アプリが動いている間だけ）
+        UIDevice.current.isBatteryMonitoringEnabled = true
+        let center = NotificationCenter.default
+        for name in [UIDevice.batteryLevelDidChangeNotification, UIDevice.batteryStateDidChangeNotification] {
+            center.addObserver(forName: name, object: nil, queue: .main) { [weak self] _ in
+                MainActor.assumeIsolated { self?.pushOutputs() }
+            }
+        }
         pushOutputs()
     }
 
@@ -34,7 +42,8 @@ final class AppModel {
 
     var islandInputs: LiveActivityController.Inputs {
         .init(offset: sync.offset, accuracyMs: sync.accuracyMs, precision: settings.islandPrecision,
-              leadingOnly: settings.islandLeadingOnly, countdown: timers.countdown, stopwatch: timers.stopwatch)
+              leadingOnly: settings.islandLeadingOnly,
+              batteryPercent: Self.batteryPercent, batteryCharging: Self.isCharging, countdown: timers.countdown, stopwatch: timers.stopwatch)
     }
 
     func toggleIsland(_ mode: LiveActivityController.Mode) async {
@@ -60,6 +69,15 @@ final class AppModel {
         ))
         let inputs = islandInputs
         Task { await island.refresh(inputs) }
+    }
+
+    static var batteryPercent: Int? {
+        let level = UIDevice.current.batteryLevel
+        return level < 0 ? nil : Int((level * 100).rounded())
+    }
+
+    static var isCharging: Bool {
+        [.charging, .full].contains(UIDevice.current.batteryState)
     }
 
     func applyScreenOn() {

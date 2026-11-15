@@ -105,15 +105,20 @@ struct ClockTab: View {
         VStack(spacing: 12) {
             HStack(spacing: 12) {
                 Button { model.pip.toggle() } label: {
-                    ZStack {
-                        // 小窓の元になる映像（ボタンの背景にプレビューとして表示）
-                        PiPSourceView(controller: model.pip).opacity(0.35)
-                        Label(model.pip.isActive ? "小窓を閉じる" : "小窓で表示", systemImage: "pip")
+                    HStack(spacing: 10) {
+                        // 小窓の元になる映像（小さなプレビューとして表示）
+                        PiPSourceView(controller: model.pip)
+                            .frame(width: 72, height: 36)
+                            .clipShape(RoundedRectangle(cornerRadius: 6))
+                            .overlay(RoundedRectangle(cornerRadius: 6).stroke(Palette.background.opacity(0.4)))
+                            .accessibilityHidden(true)
+                        Text(model.pip.isActive ? "小窓を閉じる" : "小窓で表示")
                             .font(.headline).foregroundStyle(Palette.background)
+                            .lineLimit(1).minimumScaleFactor(0.8)
                     }
+                    .padding(.horizontal, 10)
                     .frame(maxWidth: .infinity, minHeight: 56)
-                    .background(Palette.accent)
-                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                    .background(Palette.accent, in: RoundedRectangle(cornerRadius: 16))
                 }
                 .buttonStyle(.plain)
 

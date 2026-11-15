@@ -14,6 +14,7 @@ struct GenbaTokeiApp: App {
                 .environment(model.settings)
                 .environment(model.timers)
                 .preferredColorScheme(.dark)
+                .environment(\.locale, Locale(identifier: "ja_JP"))
                 .task { await model.syncNow() }
                 .onChange(of: scenePhase) { _, phase in
                     if phase == .active {

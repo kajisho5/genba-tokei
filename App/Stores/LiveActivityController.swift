@@ -26,6 +26,8 @@ final class LiveActivityController {
         var accuracyMs: Int?
         var precision: DisplayPrecision
         var leadingOnly: Bool
+        var batteryPercent: Int?
+        var batteryCharging: Bool
         var countdown: CountdownState
         var stopwatch: StopwatchState
     }
@@ -40,7 +42,7 @@ final class LiveActivityController {
         do {
             _ = try Activity.request(
                 attributes: GenbaActivityAttributes(),
-                content: ActivityContent(state: makeState(mode, inputs), staleDate: nil),
+                content: ActivityContent(state: makeState(mode, inputs), staleDate: Self.staleDate()),
                 pushType: nil
             )
             isRunning = true
@@ -55,7 +57,7 @@ final class LiveActivityController {
         guard isRunning else { return }
         let state = makeState(mode, inputs)
         for activity in Activity<GenbaActivityAttributes>.activities {
-            await activity.update(ActivityContent(state: state, staleDate: nil))
+            await activity.update(ActivityContent(state: state, staleDate: Self.staleDate()))
         }
     }
 
@@ -66,6 +68,9 @@ final class LiveActivityController {
         isRunning = false
     }
 
+    /// 電池残量は 15 分更新がなければ古いとみなして隠す（時刻は OS が数えるので影響なし）
+    private static func staleDate() -> Date { Date().addingTimeInterval(15 * 60) }
+
     private func makeState(_ mode: Mode, _ i: Inputs) -> GenbaActivityAttributes.ContentState {
         let now = Date()
         var state = GenbaActivityAttributes.ContentState(
@@ -73,7 +78,9 @@ final class LiveActivityController {
             stopwatchStart: ClockMath.stopwatchStart(systemNow: now, offset: i.offset),
             precision: i.precision,
             accuracyMs: i.accuracyMs,
-            leadingOnly: i.leadingOnly
+            leadingOnly: i.leadingOnly,
+            batteryPercent: i.batteryPercent,
+            batteryCharging: i.batteryCharging
         )
         switch mode {
         case .clock:
