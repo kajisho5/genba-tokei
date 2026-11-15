@@ -1,6 +1,6 @@
 # 現場時計（仮称：GENBA TOKEI）詳細設計書 v0.1
 
-作成日：2026-11-15 ／ 状態：**確認待ち（Step 2 まで完了・実装前）**
+作成日：2026-11-15（v0.2：オペレーター向け「時計だけモード」を追加）／ 状態：**確認待ち（Step 2 まで完了・実装前）**
 
 > この設計書の記号
 > - **【事実】** … 公式ドキュメント等で確認済み（URL は第 11 章）
@@ -51,6 +51,7 @@ iPhone・iPad・Apple Watch で動き、他のアプリを使っている間も 
 | F7 | 画面を消さない（スリープ防止）・横向き全画面 | iPhone / iPad |
 | F8 | Watch へずれ量を共有（WatchConnectivity：iPhone と Watch の通信機能） | iPhone → Watch |
 | F9 | 0 秒到達時にバイブ（Watch は触覚）・任意で音 | 全部 |
+| F10 | **時計だけモード**（オペレーター向け）：ボタン・タブ・文字を消し時刻だけを画面いっぱいに表示。**起動時の標準画面**。触ると操作部が 3 秒だけ出る（設定で「長押しのみ」に変更可）。表示する要素（1/100 秒・補正状態の点・日付）を個別にオン／オフ | iPhone / iPad（Watch は元から時計だけ。小窓・Dynamic Island は表示内容の設定で「時計のみ」を選べる） |
 
 ### 3.2 次の段階で作るアイデア（フェーズ 2 以降）
 
@@ -113,10 +114,15 @@ SVG デザイン：`docs/svg/` 以下
 | S3 | Dynamic Island（小・大）／ロック画面／フローティング | `03-island-pip.svg` |
 | S4 | Apple Watch（通常・腕下げ時） | `04-watch.svg` |
 | S5 | iPad 横向き（時計＋キュー） | `05-ipad.svg` |
+| S6 | **時計だけモード**（縦・横・触れた時・設定） | `06-clock-only.svg` |
 
 ### 画面の流れ
 ```
-起動 → メイン（時計）
+起動 → 時計だけモード（S6）
+        │   └─ 画面に触れる（または長押し）→ 操作部が 3 秒表示
+        │        └─「メニューへ」→ メイン
+        メイン（S1）
+        ├─ 右上「時計だけ」ボタン → 時計だけモードへ
         ├─ 下のタブで切替：時計 ／ カウントダウン ／ ストップウォッチ
         ├─ 右上「小窓」ボタン → フローティング開始
         ├─ 右上「島」ボタン   → Dynamic Island 表示 開始／停止
@@ -150,6 +156,7 @@ SVG デザイン：`docs/svg/` 以下
 | `StopwatchView` | 開始／停止／ラップ | 全部 |
 | `GenbaLiveActivity` | Dynamic Island とロック画面の表示（ウィジェット拡張） | iPhone |
 | `PiPClockController` | PiP 用に時計の絵を作り続けて小窓に流す | iPhone / iPad |
+| `ClockOnlyView` | 時計だけモード。縦は時・分・秒を 3 段、横は 1 行で最大化。触れた時の操作部の出し入れ | iPhone / iPad |
 | `WatchClockView` | 腕下げ（常時表示）時は秒までに切替 | Watch |
 
 ---
@@ -193,7 +200,7 @@ Text(.currentDate, format: .stopwatch(startingAt: 今日0時 - offset))
 | offset・精度・最終同期時刻 | `TimeSyncStore`（`@Observable`） | メモリ（＋最後の値を UserDefaults） |
 | 現在モード | `AppState` | UserDefaults |
 | カウントダウン目標・ストップウォッチ開始時刻・ラップ | `TimerStore` | UserDefaults（App Group で拡張と共有） |
-| 設定 | `SettingsStore` | UserDefaults |
+| 設定（時計だけモードの「起動時に開く」「1/100 秒」「点」「日付」「開き方」を含む） | `SettingsStore` | UserDefaults |
 
 ストップウォッチ・カウントダウンは「開始した時刻」だけを保存し、表示時に毎回計算する（アプリを閉じても狂わない）。
 

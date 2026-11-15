@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1260" viewBox="0 0 1440 1260" font-family="'SF Pro Text','Hiragino Sans','Noto Sans CJK JP',sans-serif">
+  <style>
+    .num{font-family:'SF Pro Display','DejaVu Sans',sans-serif;font-variant-numeric:tabular-nums;font-weight:600}
+    .note{fill:#5A6270;font-size:14px}
+    .h{fill:#1B1F26;font-size:16px;font-weight:700}
+  </style>
+  <rect width="1440" height="1260" fill="#E9ECF1"/>
+  <text x="40" y="44" font-size="22" font-weight="700" fill="#1B1F26">S6 時計だけモード（オペレーター向け・起動時の標準画面）</text>
+  <text x="40" y="70" class="note">ボタン・タブ・文字をすべて消し、時刻だけを画面いっぱいに。触ると操作部が3秒だけ出る（タップしても時刻表示やモードは切り替わらない）。</text>
+
+  <!-- ① portrait -->
+  <g transform="translate(60,130)">
+    <text x="0" y="-16" class="h">① iPhone 縦</text>
+    <rect x="-12" y="-12" width="417" height="876" rx="64" fill="#1A1C20" transform="translate(0,12)"/>
+    <rect y="12" width="393" height="852" rx="54" fill="#000"/>
+    <rect x="133" y="26" width="126" height="37" rx="18.5" fill="#000" stroke="#1A1A1A"/>
+    <circle cx="362" cy="44" r="4" fill="#30D158" fill-opacity=".7"/>
+    <text x="196.5" y="400" text-anchor="middle" class="num" font-size="150" fill="#F5F7FA">12</text>
+    <text x="196.5" y="560" text-anchor="middle" class="num" font-size="150" fill="#F5F7FA">34</text>
+    <text x="196.5" y="680" text-anchor="middle" class="num"><tspan font-size="96" fill="#F5F7FA">56</tspan><tspan font-size="64" fill="#FFB020">.78</tspan></text>
+    <text x="0" y="900" class="note">縦は「時・分・秒」を3段に積んで最大化</text>
+  </g>
+
+  <!-- ② landscape -->
+  <g transform="translate(540,130)">
+    <text x="0" y="-16" class="h">② iPhone 横（いちばん推奨：スタンドに立てて置く）</text>
+    <rect x="-12" y="0" width="876" height="417" rx="64" fill="#1A1C20"/>
+    <rect x="0" y="12" width="852" height="393" rx="54" fill="#000"/>
+    <rect x="14" y="145" width="37" height="126" rx="18.5" fill="#0A0A0A"/>
+    <circle cx="806" cy="44" r="4" fill="#30D158" fill-opacity=".7"/>
+    <text x="452" y="268" text-anchor="middle" class="num"><tspan font-size="128" fill="#F5F7FA">12:34:56</tspan><tspan font-size="82" fill="#FFB020">.78</tspan></text>
+    <text x="0" y="446" class="note">右上の小さな点だけ残す（緑＝補正OK／黄＝古い／赤＝未補正）。設定で点も消せる。</text>
+  </g>
+
+  <!-- ③ landscape with controls overlay -->
+  <g transform="translate(540,640)">
+    <text x="0" y="-16" class="h">③ 画面に触れた時（3秒で自動で消える）</text>
+    <rect x="-12" y="0" width="876" height="417" rx="64" fill="#1A1C20"/>
+    <rect x="0" y="12" width="852" height="393" rx="54" fill="#000"/>
+    <rect x="14" y="145" width="37" height="126" rx="18.5" fill="#0A0A0A"/>
+    <text x="452" y="268" text-anchor="middle" class="num" opacity=".35"><tspan font-size="128" fill="#F5F7FA">12:34:56</tspan><tspan font-size="82" fill="#FFB020">.78</tspan></text>
+    <!-- top overlay -->
+    <rect x="80" y="30" width="692" height="48" rx="24" fill="#16191E" fill-opacity=".95" stroke="#262A31"/>
+    <circle cx="106" cy="54" r="5" fill="#30D158"/>
+    <text x="120" y="59" font-size="14" fill="#7FD49A" class="num">NTP ±12ms ・ 3分前</text>
+    <text x="760" y="59" font-size="14" fill="#8A919C" text-anchor="end">11/15（日）</text>
+    <!-- bottom overlay buttons -->
+    <g transform="translate(140,320)" font-size="14" font-weight="600" text-anchor="middle">
+      <rect width="130" height="52" rx="16" fill="#16191E" stroke="#262A31"/><text x="65" y="32" fill="#F5F7FA">同期</text>
+      <rect x="146" width="130" height="52" rx="16" fill="#16191E" stroke="#262A31"/><text x="211" y="32" fill="#F5F7FA">小窓</text>
+      <rect x="292" width="130" height="52" rx="16" fill="#16191E" stroke="#262A31"/><text x="357" y="32" fill="#F5F7FA">Island</text>
+      <rect x="438" width="130" height="52" rx="16" fill="#FFB020"/><text x="503" y="32" fill="#0B0D10">メニューへ</text>
+    </g>
+    <text x="0" y="446" class="note">「メニューへ」で通常画面（S1）に戻る。誤操作が心配な現場向けに「長押しでのみ開く」設定も用意。</text>
+  </g>
+
+  <!-- ④ settings -->
+  <g transform="translate(60,1050)">
+    <rect width="420" height="180" rx="18" fill="#F7F8FA" stroke="#D5DAE1"/>
+    <text x="20" y="34" class="h">④ 時計だけモードの設定</text>
+    <g font-size="14" fill="#333">
+      <text x="20" y="66">起動時に時計だけモードで開く</text><text x="400" y="66" text-anchor="end" fill="#1E9E4A">オン</text>
+      <text x="20" y="92">1/100秒を表示</text><text x="400" y="92" text-anchor="end" fill="#1E9E4A">オン</text>
+      <text x="20" y="118">補正状態の点を表示</text><text x="400" y="118" text-anchor="end" fill="#1E9E4A">オン</text>
+      <text x="20" y="144">日付を表示</text><text x="400" y="144" text-anchor="end" fill="#8A919C">オフ</text>
+      <text x="20" y="170">操作部を開く方法</text><text x="400" y="170" text-anchor="end" fill="#333">タップ／長押し</text>
+    </g>
+  </g>
+</svg>
