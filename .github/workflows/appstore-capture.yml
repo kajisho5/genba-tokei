@@ -3,8 +3,6 @@ name: appstore-capture
 
 on:
   workflow_dispatch:
-  pull_request:
-    paths: ["ci/appstore-*.sh", ".github/workflows/appstore-capture.yml", "App/**"]
 
 # 新しい変更が来たら、古い撮影は止める（Mac の実行時間の節約）
 concurrency:
