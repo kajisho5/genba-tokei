@@ -1,19 +1,27 @@
 name: TestFlight へ配布
 
-# 手動で実行する（GitHub の Actions 画面 →「TestFlight へ配布」→「Run workflow」）
+# 手動で実行（Claude が GitHub から起動する。自分で押す場合は Actions 画面 →「TestFlight へ配布」→「Run workflow」）
 on:
   workflow_dispatch:
+    inputs:
+      prepare_only:
+        description: "準備だけ（Bundle ID の登録とチーム ID の確認）"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
+env:
+  # 指定が無ければ io.github.<GitHub のユーザー名> を使う
+  BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX || format('io.github.{0}', github.repository_owner) }}
+
 jobs:
-  upload:
-    runs-on: xcode-27
-    timeout-minutes: 60
-    env:
-      BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX }}
-      DEVELOPMENT_TEAM: ${{ secrets.APPLE_TEAM_ID }}
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      team_id: ${{ steps.asc.outputs.team_id }}
+      app_exists: ${{ steps.asc.outputs.app_exists }}
     steps:
       - name: 設定の確認
         env:
@@ -22,12 +30,42 @@ jobs:
           KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
           missing=""
-          [ -n "$BUNDLE_ID_PREFIX" ] || missing="$missing 変数BUNDLE_ID_PREFIX"
-          [ -n "$DEVELOPMENT_TEAM" ] || missing="$missing APPLE_TEAM_ID"
           [ -n "$KEY_ID" ] || missing="$missing ASC_KEY_ID"
           [ -n "$ISSUER" ] || missing="$missing ASC_ISSUER_ID"
           [ -n "$KEY_P8" ] || missing="$missing ASC_KEY_P8"
-          if [ -n "$missing" ]; then echo "::error::未設定:$missing"; exit 1; fi
+          if [ -n "$missing" ]; then echo "::error::GitHub の Secrets が未設定:$missing（docs/testflight-setup.md 参照）"; exit 1; fi
+      - uses: actions/checkout@v7
+      - name: API キーを一時ファイルに書き出す
+        env:
+          KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          install -m 600 /dev/null "$RUNNER_TEMP/AuthKey.p8"
+          printf '%s\n' "$KEY_P8" > "$RUNNER_TEMP/AuthKey.p8"
+      - name: Bundle ID の登録とチーム ID の確認
+        id: asc
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_PATH: ${{ runner.temp }}/AuthKey.p8
+          BUNDLE_ID: ${{ env.BUNDLE_ID_PREFIX }}.genbatokei
+        run: python3 -I ci/asc.py prepare
+      - name: アプリの枠があるか確認
+        if: ${{ !inputs.prepare_only && steps.asc.outputs.app_exists != 'true' }}
+        run: |
+          echo "::error::App Store Connect にアプリの枠がありません。https://appstoreconnect.apple.com/apps →「＋」→「新規 App」で、バンドル ID「${BUNDLE_ID_PREFIX}.genbatokei」を選んで作成してください。"
+          exit 1
+      - name: 鍵を消す
+        if: always()
+        run: rm -f "$RUNNER_TEMP/AuthKey.p8"
+
+  upload:
+    needs: prepare
+    if: ${{ !inputs.prepare_only }}
+    runs-on: xcode-27
+    timeout-minutes: 60
+    env:
+      DEVELOPMENT_TEAM: ${{ needs.prepare.outputs.team_id }}
+    steps:
       - uses: actions/checkout@v7
       - name: 準備（Xcode 選択・プロジェクト生成）
         run: ci/setup.sh
@@ -78,3 +116,21 @@ jobs:
         with:
           name: testflight-logs
           path: build-*.log
+
+  testers:
+    needs: upload
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: TestFlight の社内テストにアカウントの全員を追加
+        env:
+          KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_PATH: ${{ runner.temp }}/AuthKey.p8
+          BUNDLE_ID: ${{ env.BUNDLE_ID_PREFIX }}.genbatokei
+        run: |
+          install -m 600 /dev/null "$ASC_KEY_PATH"
+          printf '%s\n' "$KEY_P8" > "$ASC_KEY_PATH"
+          python3 -I ci/asc.py testers
+          rm -f "$ASC_KEY_PATH"

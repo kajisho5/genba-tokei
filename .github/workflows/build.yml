@@ -14,6 +14,13 @@ permissions:
   contents: read
 
 jobs:
+  tools:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: 配布用の道具（署名）のテスト
+        run: python3 -I ci/test_asc.py -v
+
   build:
     runs-on: xcode-27
     timeout-minutes: 40
