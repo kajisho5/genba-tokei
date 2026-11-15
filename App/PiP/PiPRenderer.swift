@@ -111,16 +111,25 @@ final class PiPRenderer: @unchecked Sendable {
         ctx.fillEllipse(in: CGRect(x: 32, y: 30, width: 16, height: 16))
 
         let hasCountdown = s.countdownTarget != nil
-        let clock = NSMutableAttributedString(string: p.main, attributes: [
-            .font: UIFont.monospacedDigitSystemFont(ofSize: hasCountdown ? 120 : 140, weight: .semibold),
-            .foregroundColor: white,
-        ])
-        if s.showsFraction {
-            clock.append(NSAttributedString(string: p.fraction, attributes: [
-                .font: UIFont.monospacedDigitSystemFont(ofSize: hasCountdown ? 78 : 90, weight: .semibold),
-                .foregroundColor: amber,
-            ]))
+        // 左右に 8% ずつ余白を残して、幅に収まる大きさにする（小窓の端で切れないように）
+        let maxWidth = CGFloat(w) * 0.84
+        func clockText(_ size: CGFloat) -> NSAttributedString {
+            let t = NSMutableAttributedString(string: p.main, attributes: [
+                .font: UIFont.monospacedDigitSystemFont(ofSize: size, weight: .semibold),
+                .foregroundColor: white,
+            ])
+            if s.showsFraction {
+                t.append(NSAttributedString(string: p.fraction, attributes: [
+                    .font: UIFont.monospacedDigitSystemFont(ofSize: size * 0.64, weight: .semibold),
+                    .foregroundColor: amber,
+                ]))
+            }
+            return t
         }
+        let base: CGFloat = hasCountdown ? 120 : 140
+        var clock = clockText(base)
+        let measured = clock.size().width
+        if measured > maxWidth { clock = clockText(base * maxWidth / measured) }
         let cs = clock.size()
         let clockY = hasCountdown ? 70.0 : (CGFloat(h) - cs.height) / 2
         clock.draw(at: CGPoint(x: (CGFloat(w) - cs.width) / 2, y: clockY))
@@ -130,10 +139,15 @@ final class PiPRenderer: @unchecked Sendable {
             let r = DurationText.countdownParts(remaining)
             let color = remaining <= 60 ? UIColor(red: 1, green: 0.27, blue: 0.23, alpha: 1)
                 : remaining <= 300 ? UIColor(red: 1, green: 0.84, blue: 0.04, alpha: 1) : gray
-            let line = NSAttributedString(string: "\(s.countdownLabel ?? "本番")まで −\(r.main)\(r.fraction)", attributes: [
-                .font: UIFont.monospacedDigitSystemFont(ofSize: 52, weight: .semibold),
-                .foregroundColor: color,
-            ])
+            let text = "\(s.countdownLabel ?? "本番")まで −\(r.main)\(r.fraction)"
+            func lineText(_ size: CGFloat) -> NSAttributedString {
+                NSAttributedString(string: text, attributes: [
+                    .font: UIFont.monospacedDigitSystemFont(ofSize: size, weight: .semibold),
+                    .foregroundColor: color,
+                ])
+            }
+            var line = lineText(52)
+            if line.size().width > maxWidth { line = lineText(52 * maxWidth / line.size().width) }
             let ls = line.size()
             line.draw(at: CGPoint(x: (CGFloat(w) - ls.width) / 2, y: 240))
         }

@@ -36,16 +36,18 @@ struct WatchClockView: View {
             let p = ClockMath.parts(of: now)
             let tint = dimmed ? Palette.subText : Palette.text
             VStack(spacing: 2) {
-                HStack {
+                // 右上はページ表示（クラウンで切り替える時の点々）と重なるので、左に寄せる
+                HStack(spacing: 5) {
                     Circle().fill(model.isCorrected ? Palette.ok : Palette.faint)
                         .frame(width: 7, height: 7).opacity(dimmed ? 0.5 : 1)
+                    Text(now, format: .dateTime.month(.defaultDigits).day())
+                        .font(.system(size: 13).monospacedDigit()).foregroundStyle(tint)
                     if !dimmed, let ms = model.message?.accuracyMs {
                         Text("±\(ms)ms").font(.system(size: 11).monospacedDigit()).foregroundStyle(Palette.okText)
                     }
-                    Spacer()
-                    Text(now, format: .dateTime.month(.defaultDigits).day())
-                        .font(.system(size: 13).monospacedDigit()).foregroundStyle(tint)
+                    Spacer(minLength: 0)
                 }
+                .padding(.trailing, 14)
                 Spacer(minLength: 0)
                 Text(String(format: "%02d:%02d", p.hour, p.minute))
                     .font(.system(size: 54, weight: .semibold).monospacedDigit()).foregroundStyle(tint)
