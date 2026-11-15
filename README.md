@@ -5,10 +5,10 @@ iPhone / iPad / Apple Watch 用の、1/100 秒まで表示する現場向け時�
 - 設計書：[docs/design.md](docs/design.md)
 - デザイン：[docs/svg/](docs/svg/)（S6＝オペレーター向け時計だけモード）
 - 紹介ページ：`site/`（公開先 https://kajisho5.github.io/genba-tokei/ 、設計 [docs/site/lp-design.md](docs/site/lp-design.md)）
-- iPhone に試作を入れる準備：[docs/testflight-setup.md](docs/testflight-setup.md)
+- iPhone に入れる準備：[docs/testflight-setup.md](docs/testflight-setup.md) ／ 実機で確かめること：[docs/device-test.md](docs/device-test.md)
 
 ## 状態
-試作（Dynamic Island で 1/100 秒が動くかの検証版）
+本実装中（試作で Dynamic Island の 1/100 秒表示を実機確認済み）
 
 ## 構成
 - `project.yml` … XcodeGen 設定（Xcode プロジェクトは CI 上で自動生成）

@@ -3,7 +3,7 @@ export const repoUrl = "https://github.com/kajisho5/genba-tokei";
 
 export const features = [
   { icon: "sync", title: "時刻を自動で補正", lines: ["ネットの時刻サーバーに問い合わせて、", "端末のずれと誤差（±ms）を表示。"] },
-  { icon: "island", title: "Dynamic Island", lines: ["ホーム画面でも上の島に時刻。", "1/100秒表示は実機で検証中。"] },
+  { icon: "island", title: "Dynamic Island", lines: ["ホーム画面でも上の島に時刻。", "1/100秒まで表示（実機で確認済み）。"] },
   { icon: "pip", title: "小窓で表示", lines: ["台本や進行表を見ながら、", "時計を画面の上に浮かべる。"] },
   { icon: "clock", title: "時計だけモード", lines: ["ボタンも文字も消して、時刻だけを", "画面いっぱいに。誤操作も防止。"] },
   { icon: "countdown", title: "本番までカウントダウン", lines: ["残り5分で黄、1分で赤。", "0秒で振動してお知らせ。"] },
@@ -19,7 +19,7 @@ export const operatorUses = [
 export type StepState = "done" | "now" | "todo";
 export const steps: { label: string; state: StepState }[] = [
   { label: "設計・デザイン", state: "done" },
-  { label: "試作（いまここ）", state: "now" },
-  { label: "TestFlight 公開", state: "todo" },
+  { label: "試作・実機確認", state: "done" },
+  { label: "本実装（いまここ）", state: "now" },
   { label: "App Store", state: "todo" },
 ];

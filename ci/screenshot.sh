@@ -15,6 +15,15 @@ xcrun simctl bootstatus "$UDID" -b
 xcrun simctl status_bar "$UDID" override --time "12:34" || true
 xcrun simctl install "$UDID" "$APP"
 BID="$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Info.plist")"
-xcrun simctl launch "$UDID" "$BID"
-sleep 6
-xcrun simctl io "$UDID" screenshot screenshots/prototype.png
+
+shot() { # 名前 [起動引数...]
+  local name="$1"; shift
+  xcrun simctl terminate "$UDID" "$BID" 2>/dev/null || true
+  xcrun simctl launch "$UDID" "$BID" "$@" >/dev/null
+  sleep 6
+  xcrun simctl io "$UDID" screenshot "screenshots/$name.png"
+}
+shot 1-clock-only
+shot 2-clock -tab 0
+shot 3-countdown -tab 1
+shot 4-stopwatch -tab 2

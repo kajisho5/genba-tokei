@@ -16,3 +16,11 @@ extension Palette {
     static let border = Color(red: 0x26 / 255, green: 0x2A / 255, blue: 0x31 / 255)
     static let warning = Color(red: 0xFF / 255, green: 0xD6 / 255, blue: 0x0A / 255)
 }
+
+extension Palette {
+    static let okBackground = Color(red: 0x0F / 255, green: 0x24 / 255, blue: 0x17 / 255)
+}
+
+extension Palette {
+    static let faint = Color(red: 0x5A / 255, green: 0x62 / 255, blue: 0x70 / 255)
+}

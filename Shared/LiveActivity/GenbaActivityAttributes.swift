@@ -3,10 +3,20 @@ import Foundation
 import ActivityKit
 
 /// Dynamic Island / ロック画面に渡すデータ（4KB 以内）。
+/// 時刻はすべて「端末の時計（system）」で渡す。ウィジェット側は OS が Date.now で数えるため。
 struct GenbaActivityAttributes: ActivityAttributes {
     struct ContentState: Codable, Hashable, Sendable {
-        /// ClockMath.stopwatchStart で求めた「ストップウォッチ開始時刻」
+        enum Mode: String, Codable, Hashable, Sendable { case clock, countdown, stopwatch }
+
+        var mode: Mode
+        /// clock：補正済みの今日 0 時（ClockMath.stopwatchStart）／ stopwatch：数え始めた時刻（動作中のみ）
         var stopwatchStart: Date
+        /// countdown：設定した時刻と本番の時刻
+        var countdownStart: Date?
+        var countdownEnd: Date?
+        var label: String?
+        /// stopwatch が止まっている時の経過秒
+        var pausedElapsed: Double?
         var precision: DisplayPrecision
         /// NTP の誤差（ミリ秒）。未補正なら nil
         var accuracyMs: Int?
@@ -14,7 +24,7 @@ struct GenbaActivityAttributes: ActivityAttributes {
 }
 #endif
 
-/// 試作で切り替えて比べる表示の細かさ
+/// 表示の細かさ
 enum DisplayPrecision: String, Codable, Hashable, Sendable, CaseIterable, Identifiable {
     case centiseconds
     case deciseconds

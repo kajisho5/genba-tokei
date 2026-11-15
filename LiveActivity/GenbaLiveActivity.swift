@@ -2,25 +2,64 @@ import ActivityKit
 import SwiftUI
 import WidgetKit
 
-/// 試作の核心：時刻を OS 自身に数えさせる。
-/// 「今日 0 時（補正済み）から始めたストップウォッチ」＝現在時刻なので、
-/// アプリから毎回書き換えなくても OS が 1/100 秒まで進めてくれる（はず）。
-struct LiveClockText: View {
+/// 時刻を OS 自身に数えさせる（アプリから毎回書き換えない）。
+/// - 時計：「補正済みの今日 0 時」から始めたストップウォッチ＝現在時刻
+/// - カウントダウン：OS 標準のタイマー表示
+/// - ストップウォッチ：数え始めた時刻からのストップウォッチ表示
+struct LiveTimeText: View {
     let state: GenbaActivityAttributes.ContentState
     let size: CGFloat
 
     var body: some View {
+        content
+            .font(.system(size: size, weight: .semibold).monospacedDigit())
+            .foregroundStyle(color)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+    }
+
+    @ViewBuilder private var content: some View {
+        switch state.mode {
+        case .clock:
+            stopwatch(from: state.stopwatchStart)
+        case .stopwatch:
+            if let paused = state.pausedElapsed {
+                let p = DurationText.parts(paused)
+                Text(p.main + (state.precision == .seconds ? "" : p.fraction))
+            } else {
+                stopwatch(from: state.stopwatchStart)
+            }
+        case .countdown:
+            if let start = state.countdownStart, let end = state.countdownEnd, start < end {
+                Text(
+                    TimeDataSource<Date>.currentDate,
+                    format: SystemFormatStyle.Timer(
+                        countingDownIn: start..<end,
+                        showsHours: true,
+                        maxFieldCount: 4,
+                        maxPrecision: state.precision.maxPrecision
+                    )
+                )
+            } else {
+                Text("0:00")
+            }
+        }
+    }
+
+    private func stopwatch(from start: Date) -> Text {
         Text(
             TimeDataSource<Date>.currentDate,
             format: SystemFormatStyle.Stopwatch(
-                startingAt: state.stopwatchStart,
+                startingAt: start,
                 showsHours: true,
                 maxFieldCount: 4,
                 maxPrecision: state.precision.maxPrecision
             )
         )
-        .font(.system(size: size, weight: .semibold).monospacedDigit())
-        .foregroundStyle(Palette.text)
+    }
+
+    private var color: Color {
+        state.mode == .countdown ? Palette.warning : Palette.text
     }
 }
 
@@ -30,6 +69,14 @@ struct SyncDot: View {
         Circle()
             .fill(accuracyMs == nil ? Palette.danger : Palette.ok)
             .frame(width: 8, height: 8)
+    }
+}
+
+private func modeTitle(_ state: GenbaActivityAttributes.ContentState) -> String {
+    switch state.mode {
+    case .clock: "現在時刻"
+    case .countdown: "\(state.label ?? "本番")まで"
+    case .stopwatch: "ストップウォッチ"
     }
 }
 
@@ -44,35 +91,36 @@ struct GenbaLiveActivity: Widget {
                 DynamicIslandExpandedRegion(.leading) {
                     HStack(spacing: 6) {
                         SyncDot(accuracyMs: context.state.accuracyMs)
-                        Text(accuracyText(context.state.accuracyMs))
+                        Text(context.state.accuracyMs.map { "±\($0)ms" } ?? "未補正")
                             .font(.caption.monospacedDigit())
                             .foregroundStyle(Palette.okText)
                     }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text(context.state.precision.label)
+                    Text(modeTitle(context.state))
                         .font(.caption)
                         .foregroundStyle(Palette.subText)
+                        .lineLimit(1)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    LiveClockText(state: context.state, size: 40)
+                    LiveTimeText(state: context.state, size: 40)
                         .frame(maxWidth: .infinity)
                 }
             } compactLeading: {
-                SyncDot(accuracyMs: context.state.accuracyMs)
+                if context.state.mode == .clock {
+                    SyncDot(accuracyMs: context.state.accuracyMs)
+                } else {
+                    Image(systemName: context.state.mode == .countdown ? "hourglass" : "stopwatch")
+                        .foregroundStyle(Palette.accent)
+                }
             } compactTrailing: {
-                LiveClockText(state: context.state, size: 14)
+                LiveTimeText(state: context.state, size: 14)
                     .frame(maxWidth: 110)
             } minimal: {
-                Image(systemName: "clock")
+                Image(systemName: context.state.mode == .countdown ? "hourglass" : "clock")
                     .foregroundStyle(Palette.accent)
             }
         }
-    }
-
-    private func accuracyText(_ ms: Int?) -> String {
-        guard let ms else { return "未補正" }
-        return "±\(ms)ms"
     }
 }
 
@@ -83,11 +131,11 @@ struct LockScreenView: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 6) {
                 SyncDot(accuracyMs: state.accuracyMs)
-                Text("現場時計（試作）・\(state.precision.label)")
+                Text("現場時計・\(modeTitle(state))")
                     .font(.caption)
                     .foregroundStyle(Palette.subText)
             }
-            LiveClockText(state: state, size: 44)
+            LiveTimeText(state: state, size: 44)
         }
         .padding(16)
         .frame(maxWidth: .infinity, alignment: .leading)
