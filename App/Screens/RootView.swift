@@ -44,6 +44,18 @@ struct RootView: View {
                 .environment(model.sync)
                 .environment(model.settings)
         }
+        .task {
+            // App プレビュー（説明動画）の録画用（起動引数 -tour）：画面を順に自動で切り替える
+            guard ProcessInfo.processInfo.arguments.contains("-tour") else { return }
+            let steps: [(clockOnly: Bool, tab: Int, seconds: Double)] = [
+                (true, 0, 7), (false, 0, 6), (false, 1, 6), (false, 2, 6), (true, 0, 4),
+            ]
+            for step in steps {
+                showsClockOnly = step.clockOnly
+                tab = step.tab
+                try? await Task.sleep(for: .seconds(step.seconds))
+            }
+        }
         .onAppear {
             model.applyScreenOn()
             if !didDecideStart {
