@@ -4,6 +4,7 @@ iPhone / iPad / Apple Watch 用の、1/100 秒まで表示する現場向け時�
 
 - 設計書：[docs/design.md](docs/design.md)
 - デザイン：[docs/svg/](docs/svg/)（S6＝オペレーター向け時計だけモード）
+- 紹介ページ：`site/`（公開先 https://kajisho5.github.io/genba-tokei/ 、設計 [docs/site/lp-design.md](docs/site/lp-design.md)）
 - iPhone に試作を入れる準備：[docs/testflight-setup.md](docs/testflight-setup.md)
 
 ## 状態
@@ -14,3 +15,4 @@ iPhone / iPad / Apple Watch 用の、1/100 秒まで表示する現場向け時�
 - `App/` … iPhone / iPad アプリ ／ `LiveActivity/` … Dynamic Island ／ `Shared/` … 共通 ／ `Tests/` … 自動テスト
 - `.github/workflows/build.yml` … 変更のたびにテストとビルド
 - `.github/workflows/testflight.yml` … 手動で TestFlight に配布
+- `.github/workflows/pages.yml` … main に入ったら紹介ページを公開
