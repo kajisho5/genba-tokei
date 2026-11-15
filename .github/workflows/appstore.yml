@@ -1,0 +1,42 @@
+# App Store 公開：画面写真を撮って、kajisho5/runway の apple-appstore で説明文・価格・写真などを登録（submit で審査に提出）
+name: appstore
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "公開する版"
+        default: "1.0"
+      submit:
+        description: "審査に提出する"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  shots:
+    runs-on: xcode-27
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+      - name: 準備（Xcode 選択・プロジェクト生成）
+        run: ci/setup.sh
+      - name: 画面写真を撮る
+        run: ci/appstore-shots.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: appstore-shots
+          path: store-shots
+
+  store:
+    needs: shots
+    uses: kajisho5/runway/.github/workflows/apple-appstore.yml@main
+    with:
+      bundle_id: com.seventhwell.GenbaTokei
+      version: ${{ inputs.version }}
+      metadata: appstore/metadata.json
+      screenshots_artifact: appstore-shots
+      submit: ${{ inputs.submit }}
+    secrets: inherit
