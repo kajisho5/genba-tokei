@@ -17,9 +17,6 @@ jobs:
   build:
     runs-on: xcode-27
     timeout-minutes: 40
-    env:
-      BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX || 'com.example' }}
-      DEVELOPMENT_TEAM: ""
     steps:
       - uses: actions/checkout@v7
       - name: 準備（Xcode 選択・プロジェクト生成）
