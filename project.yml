@@ -2,6 +2,7 @@
 # 署名・配布は kajisho5/runway の共通ワークフロー（チーム ID は xcodebuild に渡される）。
 name: GenbaTokei
 options:
+  developmentLanguage: ja
   deploymentTarget:
     iOS: "18.0"
     watchOS: "11.0"
@@ -29,6 +30,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: 現場時計
+        CFBundleDevelopmentRegion: ja
+        CFBundleLocalizations: [ja]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
@@ -65,6 +68,8 @@ targets:
       path: LiveActivity/Info.plist
       properties:
         CFBundleDisplayName: 現場時計
+        CFBundleDevelopmentRegion: ja
+        CFBundleLocalizations: [ja]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
@@ -81,6 +86,8 @@ targets:
       path: Watch/Info.plist
       properties:
         CFBundleDisplayName: 現場時計
+        CFBundleDevelopmentRegion: ja
+        CFBundleLocalizations: [ja]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         WKApplication: true

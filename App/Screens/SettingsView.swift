@@ -24,12 +24,12 @@ struct SettingsView: View {
                     Picker("Dynamic Island の細かさ", selection: $settings.islandPrecision) {
                         ForEach(DisplayPrecision.allCases) { Text($0.label).tag($0) }
                     }
-                    Picker("Dynamic Island の表示位置", selection: $settings.islandLeadingOnly) {
-                        Text("左だけ").tag(true)
-                        Text("左右に分ける").tag(false)
+                    Picker("Dynamic Island の並び", selection: $settings.islandLeadingOnly) {
+                        Text("左に時刻・右に電池").tag(true)
+                        Text("左に点・右に時刻").tag(false)
                     }
                 } footer: {
-                    Text("「左だけ」は右側を空けるので、電池残量や電波が隠れません。画面が消えている間は、OS の都合で秒より細かい表示が止まることがあります。")
+                    Text("島は左右対称に広がるため、時刻を出すと電池・電波の表示が隠れます。「右に電池」は電池残量を島の中に出します（アプリが動いている間だけ更新し、15 分更新がないと消えます）。電波の強さは Apple が取得手段を公開していないため出せません。")
                 }
                 Section {
                     Toggle("画面をスリープさせない", isOn: $settings.keepsScreenOn)
