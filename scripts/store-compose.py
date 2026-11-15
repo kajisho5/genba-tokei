@@ -10,7 +10,6 @@
   previews/<表示種別>/1.mp4     … App プレビュー（iPhone 886x1920 / iPad 1200x1600、30fps、29 秒、字幕入り、無音の音声トラック付き）
 """
 import os
-import shutil
 import subprocess
 import sys
 
@@ -102,7 +101,11 @@ def screenshots(src, dst):
     # Watch は画面そのまま（小さいので文字を入れない）
     wdir = os.path.join(dst, "screenshots", "APP_WATCH_ULTRA")
     os.makedirs(wdir, exist_ok=True)
-    shutil.copy(os.path.join(src, "APP_WATCH_ULTRA", "1.png"), os.path.join(wdir, "1.png"))
+    # App Store は透明（アルファ）付きの画像を受け付けないので、黒地に重ねて保存する
+    w = Image.open(os.path.join(src, "APP_WATCH_ULTRA", "1.png")).convert("RGBA")
+    flat = Image.new("RGB", w.size, (0, 0, 0))
+    flat.paste(w, mask=w.split()[3])
+    flat.save(os.path.join(wdir, "1.png"))
 
 
 # 録画の何秒目からツアーが始まるか：録画開始 → 2 秒後に起動 → アプリは 15 秒待ってから切り替えを始める
