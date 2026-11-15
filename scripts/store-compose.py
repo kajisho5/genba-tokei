@@ -105,8 +105,24 @@ def screenshots(src, dst):
     shutil.copy(os.path.join(src, "APP_WATCH_ULTRA", "1.png"), os.path.join(wdir, "1.png"))
 
 
+# 録画の何秒目からツアーが始まるか：録画開始 → 2 秒後に起動 → アプリは 15 秒待ってから切り替えを始める
+TOUR_START = 2 + 15
+
+
+def check_app_frame(src_video, at):
+    """指定の秒にアプリの暗い画面が映っているか確かめる（白い起動画面のままなら止める）"""
+    raw = subprocess.run([
+        "ffmpeg", "-loglevel", "error", "-ss", str(at), "-i", src_video,
+        "-vf", "fps=30,scale=16:16,format=gray", "-frames:v", "1", "-f", "rawvideo", "-",
+    ], check=True, capture_output=True).stdout
+    if not raw or sum(raw) / len(raw) >= 110:
+        sys.exit(f"{src_video}: {at} 秒の時点でアプリの画面が映っていない")
+
+
 def preview(src_video, out_path, w, h, caption_size):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    start = TOUR_START
+    check_app_frame(src_video, start + 1)
     draws = []
     for start, end, text in VIDEO_CAPTIONS:
         draws.append(
@@ -114,11 +130,12 @@ def preview(src_video, out_path, w, h, caption_size):
             f"box=1:boxcolor=0x0B0D10@0.85:boxborderw={caption_size // 2}:x=(w-text_w)/2:y=h*0.80:"
             f"enable='between(t,{start},{end})'"
         )
-    vf = (f"fps=30,scale={w}:{h}:force_original_aspect_ratio=decrease,"
+    # 画面が止まっている間は録画にコマが無いので、fps=30 で埋め、最後も止め絵で延ばす
+    vf = (f"fps=30,tpad=stop_mode=clone:stop_duration=30,trim=duration=29,scale={w}:{h}:force_original_aspect_ratio=decrease,"
           f"pad={w}:{h}:(ow-iw)/2:(oh-ih)/2:color=0x0B0D10,setsar=1," + ",".join(draws))
     subprocess.run([
         "ffmpeg", "-loglevel", "error", "-y",
-        "-ss", "1.5", "-t", "29", "-i", src_video,
+        "-ss", f"{start + 0.3:.2f}", "-i", src_video,
         "-f", "lavfi", "-t", "29", "-i", "anullsrc=channel_layout=stereo:sample_rate=44100",
         "-vf", vf, "-map", "0:v", "-map", "1:a",
         "-c:v", "libx264", "-profile:v", "high", "-level", "4.0", "-pix_fmt", "yuv420p",

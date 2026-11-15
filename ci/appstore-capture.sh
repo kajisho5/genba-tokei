@@ -22,10 +22,10 @@ record() { # 端末名 出力
   local rec=$!
   sleep 2
   xcrun simctl launch "$id" "$BID" -demo -tour >/dev/null
-  sleep 31
+  sleep 50   # アプリは起動後 15 秒待ってから画面を切り替え始める（約 29 秒）。前後に余裕をもたせる
   kill -INT "$rec"
   wait "$rec" || true
   ls -la "$2"
 }
-record "iPhone 18 Pro Max" capture/video-iphone.mov
-record "iPad Pro 13-inch (M5)" capture/video-ipad.mov
+record "$(cat capture/iphone-device.txt)" capture/video-iphone.mov
+record "$(cat capture/ipad-device.txt)" capture/video-ipad.mov
