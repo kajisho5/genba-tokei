@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1300" height="980" viewBox="0 0 1300 980" font-family="'SF Pro Text','Hiragino Sans','Noto Sans CJK JP',sans-serif">
+  <style>
+    .num{font-family:'SF Pro Display','DejaVu Sans',sans-serif;font-variant-numeric:tabular-nums;font-weight:600}
+    .note{fill:#5A6270;font-size:14px}
+  </style>
+  <rect width="1300" height="980" fill="#E9ECF1"/>
+  <text x="40" y="44" font-size="22" font-weight="700" fill="#1B1F26">S5 iPad 横向き（11インチ想定 1180×820pt）</text>
+  <text x="40" y="70" class="note">左に大きな時計、右にキュー一覧（フェーズ2のキュー表を先取りした配置）。MVPでは右側は「次のキュー1件」のみ。</text>
+
+  <g transform="translate(60,110)">
+    <rect x="-20" y="-20" width="1220" height="860" rx="40" fill="#1A1C20"/>
+    <rect width="1180" height="820" rx="22" fill="#0B0D10"/>
+    <!-- top bar -->
+    <text x="32" y="48" font-size="20" font-weight="700" fill="#F5F7FA">現場時計</text>
+    <g transform="translate(150,26)">
+      <rect width="300" height="36" rx="18" fill="#0F2417" stroke="#1E5A33"/>
+      <circle cx="20" cy="18" r="5" fill="#30D158"/>
+      <text x="34" y="23" font-size="13.5" fill="#7FD49A" class="num">NTP補正済み +0.142s ±12ms ・ 3分前</text>
+    </g>
+    <g transform="translate(1000,26)" fill="none" stroke="#F5F7FA" stroke-width="1.8">
+      <rect width="40" height="36" rx="10" fill="#16191E" stroke="#262A31"/>
+      <rect x="10" y="10" width="20" height="16" rx="3"/><rect x="18" y="17" width="10" height="7" rx="1.5" fill="#FFB020" stroke="none"/>
+      <rect x="50" width="40" height="36" rx="10" fill="#16191E" stroke="#262A31"/>
+      <rect x="59" y="13" width="22" height="10" rx="5" fill="#F5F7FA" stroke="none"/>
+      <rect x="100" width="40" height="36" rx="10" fill="#16191E" stroke="#262A31"/>
+      <circle cx="120" cy="18" r="7.5" stroke-dasharray="3.2 2.3"/><circle cx="120" cy="18" r="3"/>
+    </g>
+    <!-- segmented -->
+    <g transform="translate(32,84)">
+      <rect width="420" height="40" rx="12" fill="#16191E"/>
+      <rect x="4" y="4" width="136" height="32" rx="9" fill="#2A2F37"/>
+      <text x="72" y="26" font-size="14" fill="#F5F7FA" text-anchor="middle" font-weight="600">時計</text>
+      <text x="210" y="26" font-size="14" fill="#8A919C" text-anchor="middle">カウントダウン</text>
+      <text x="348" y="26" font-size="14" fill="#8A919C" text-anchor="middle">ストップウォッチ</text>
+    </g>
+    <!-- clock -->
+    <text x="390" y="300" font-size="22" fill="#8A919C" text-anchor="middle">2026年11月15日（日）JST</text>
+    <text x="390" y="440" text-anchor="middle" class="num"><tspan font-size="128" fill="#F5F7FA">12:34:56</tspan><tspan font-size="84" fill="#FFB020">.78</tspan></text>
+    <rect x="80" y="480" width="620" height="6" rx="3" fill="#262A31"/>
+    <rect x="80" y="480" width="580" height="6" rx="3" fill="#F5F7FA" fill-opacity=".85"/>
+    <!-- big countdown -->
+    <g transform="translate(80,560)">
+      <rect width="620" height="200" rx="24" fill="#16191E" stroke="#262A31"/>
+      <text x="28" y="44" font-size="16" fill="#8A919C">次のキュー</text>
+      <text x="28" y="78" font-size="26" font-weight="700" fill="#F5F7FA">本番（サンプル）</text>
+      <text x="592" y="78" font-size="22" fill="#8A919C" text-anchor="end" class="num">13:00:00</text>
+      <text x="28" y="164" class="num"><tspan font-size="72" fill="#F5F7FA">−00:25:03</tspan><tspan font-size="46" fill="#FFB020">.22</tspan></text>
+    </g>
+    <!-- cue list -->
+    <line x1="780" y1="84" x2="780" y2="790" stroke="#262A31"/>
+    <text x="810" y="112" font-size="18" font-weight="700" fill="#F5F7FA">キュー（サンプル）</text>
+    <text x="1148" y="112" font-size="14" fill="#FFB020" text-anchor="end">＋追加</text>
+    <g class="num" font-size="17">
+      <g transform="translate(800,140)">
+        <rect width="356" height="64" rx="14" fill="#101215"/>
+        <text x="18" y="40" fill="#5A6270">12:30</text><text x="90" y="40" fill="#5A6270" font-weight="400">リハーサル開始</text><text x="338" y="40" fill="#5A6270" text-anchor="end" font-size="13">済</text>
+      </g>
+      <g transform="translate(800,214)">
+        <rect width="356" height="64" rx="14" fill="#101215"/>
+        <text x="18" y="40" fill="#5A6270">12:45</text><text x="90" y="40" fill="#5A6270" font-weight="400">照明チェック</text><text x="338" y="40" fill="#5A6270" text-anchor="end" font-size="13">済</text>
+      </g>
+      <g transform="translate(800,288)">
+        <rect width="356" height="64" rx="14" fill="#2A2410" stroke="#FFB020"/>
+        <text x="18" y="40" fill="#F5F7FA">13:00</text><text x="90" y="40" fill="#F5F7FA">本番</text><text x="338" y="40" fill="#FFB020" text-anchor="end" font-size="15">−25:03</text>
+      </g>
+      <g transform="translate(800,362)">
+        <rect width="356" height="64" rx="14" fill="#16191E"/>
+        <text x="18" y="40" fill="#F5F7FA">13:20</text><text x="90" y="40" fill="#F5F7FA" font-weight="400">転換</text><text x="338" y="40" fill="#8A919C" text-anchor="end" font-size="15">−45:03</text>
+      </g>
+      <g transform="translate(800,436)">
+        <rect width="356" height="64" rx="14" fill="#16191E"/>
+        <text x="18" y="40" fill="#F5F7FA">13:30</text><text x="90" y="40" fill="#F5F7FA" font-weight="400">第2部</text><text x="338" y="40" fill="#8A919C" text-anchor="end" font-size="15">−55:03</text>
+      </g>
+    </g>
+    <g transform="translate(800,700)">
+      <rect width="356" height="64" rx="16" fill="#FFB020"/>
+      <text x="178" y="39" font-size="17" font-weight="700" fill="#0B0D10" text-anchor="middle">外部モニターに時計を出す（フェーズ2）</text>
+    </g>
+  </g>
+</svg>
