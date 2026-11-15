@@ -14,5 +14,5 @@ iPhone / iPad / Apple Watch 用の、1/100 秒まで表示する現場向け時�
 - `project.yml` … XcodeGen 設定（Xcode プロジェクトは CI 上で自動生成）
 - `App/` … iPhone / iPad アプリ ／ `LiveActivity/` … Dynamic Island ／ `Shared/` … 共通 ／ `Tests/` … 自動テスト
 - `.github/workflows/build.yml` … 変更のたびにテストとビルド
-- `.github/workflows/testflight.yml` … 手動で TestFlight に配布
+- `.github/workflows/testflight.yml` … 手動で TestFlight に配布（kajisho5/runway の共通ワークフロー）
 - `.github/workflows/pages.yml` … main に入ったら紹介ページを公開
