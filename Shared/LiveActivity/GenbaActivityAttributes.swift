@@ -20,14 +20,33 @@ struct GenbaActivityAttributes: ActivityAttributes {
         var precision: DisplayPrecision
         /// NTP の誤差（ミリ秒）。未補正なら nil
         var accuracyMs: Int?
-        /// true：左に時刻、右に電池残量（false：左に点、右に時刻）
-        var leadingOnly: Bool?
+        /// 島の並び（nil は秒だけ）
+        var layout: IslandLayout?
         /// 電池残量（%）と充電中か。アプリが動いている間だけ更新される（古くなったら表示しない）
         var batteryPercent: Int?
         var batteryCharging: Bool?
     }
 }
 #endif
+
+/// Dynamic Island の並び
+enum IslandLayout: String, Codable, Hashable, Sendable, CaseIterable, Identifiable {
+    /// 「:36.47」だけ。島が狭いので本体の時刻・電波・電池が見える（時:分は本体の時刻で読む）
+    case secondsOnly
+    /// 左に時刻、右に電池残量
+    case timeAndBattery
+    /// 左に点、右に時刻
+    case dotAndTime
+
+    var id: String { rawValue }
+    var label: String {
+        switch self {
+        case .secondsOnly: "秒と1/100秒だけ（電波・電池が見える）"
+        case .timeAndBattery: "左に時刻・右に電池"
+        case .dotAndTime: "左に点・右に時刻"
+        }
+    }
+}
 
 /// 表示の細かさ
 enum DisplayPrecision: String, Codable, Hashable, Sendable, CaseIterable, Identifiable {
