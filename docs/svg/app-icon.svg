@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" fill="#0B0D10"/>
+  <text x="512" y="550" text-anchor="middle" font-family="'SF Pro Display','DejaVu Sans',sans-serif" font-weight="700" font-size="290" fill="#F5F7FA">12:34</text>
+  <text x="512" y="800" text-anchor="middle" font-family="'SF Pro Display','DejaVu Sans',sans-serif" font-weight="700" font-size="230" fill="#FFB020">.78</text>
+  <rect x="212" y="620" width="600" height="10" rx="5" fill="#262A31"/>
+</svg>

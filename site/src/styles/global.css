@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* 設計書 5 章（アプリ）と同じ配色 */
+@theme {
+  --color-bg: #0b0d10;
+  --color-band: #101215;
+  --color-surface: #16191e;
+  --color-border: #262a31;
+  --color-line: #1c2026;
+  --color-text: #f5f7fa;
+  --color-sub: #8a919c;
+  --color-faint: #5a6270;
+  --color-accent: #ffb020;
+  --color-ok: #30d158;
+  --color-ok-text: #7fd49a;
+  --color-warn: #ffd60a;
+  --color-danger: #ff453a;
+  --font-sans: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Segoe UI", Meiryo, "Noto Sans JP", sans-serif;
+}
+
+html { color-scheme: dark; scroll-behavior: smooth; }
+body { background: var(--color-bg); color: var(--color-text); }
+.num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

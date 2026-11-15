@@ -1,0 +1,53 @@
+name: ビルドとテスト
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 40
+    env:
+      BUNDLE_ID_PREFIX: ${{ vars.BUNDLE_ID_PREFIX || 'com.example' }}
+      DEVELOPMENT_TEAM: ""
+    steps:
+      - uses: actions/checkout@v7
+      - name: 準備（Xcode 選択・プロジェクト生成）
+        run: ci/setup.sh
+      - name: 自動テスト（シミュレーター）
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project GenbaTokei.xcodeproj -scheme GenbaTokei \
+            -destination 'platform=iOS Simulator,name=iPhone 18 Pro,OS=27.2' \
+            CODE_SIGNING_ALLOWED=NO | tee build-test.log | grep -E '(error|warning: |Test |✔|✘|passed|failed|\*\* )' || true
+          grep -q '\*\* TEST SUCCEEDED \*\*' build-test.log
+      - name: 実機向けビルド（署名なし・コンパイル確認）
+        run: |
+          set -o pipefail
+          xcodebuild build \
+            -project GenbaTokei.xcodeproj -scheme GenbaTokei -configuration Release \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGNING_ALLOWED=NO | tee build-device.log | grep -E '(error|warning: |\*\* )' || true
+          grep -q '\*\* BUILD SUCCEEDED \*\*' build-device.log
+      - name: 画面写真（シミュレーター）
+        if: success()
+        run: ci/screenshot.sh
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: build-logs-and-screenshots
+          path: |
+            build-*.log
+            screenshots/
+          if-no-files-found: ignore

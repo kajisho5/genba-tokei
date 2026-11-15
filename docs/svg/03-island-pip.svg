@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1320" viewBox="0 0 1400 1320" font-family="'SF Pro Text','Hiragino Sans','Noto Sans CJK JP',sans-serif">
+  <style>
+    .num{font-family:'SF Pro Display','DejaVu Sans',sans-serif;font-variant-numeric:tabular-nums;font-weight:600}
+    .note{fill:#5A6270;font-size:14px}
+    .h{fill:#1B1F26;font-size:16px;font-weight:700}
+  </style>
+  <rect width="1400" height="1320" fill="#E9ECF1"/>
+  <text x="40" y="44" font-size="22" font-weight="700" fill="#1B1F26">S3 Dynamic Island ／ ロック画面 ／ フローティング（小窓）</text>
+  <text x="40" y="70" class="note">島の表示は2倍に拡大して描画。ミリ秒表示はOSが自動で進める方式（実機で要検証。不可なら秒までに切替）。</text>
+
+  <!-- ===== Island states (2x) ===== -->
+  <g transform="translate(40,100)">
+    <rect width="1320" height="330" rx="20" fill="#F7F8FA" stroke="#D5DAE1"/>
+    <!-- compact -->
+    <text x="30" y="40" class="h">① コンパクト（通常時）</text>
+    <g transform="translate(30,64) scale(2)">
+      <rect width="250" height="37" rx="18.5" fill="#000"/>
+      <circle cx="18" cy="18.5" r="5" fill="#30D158"/>
+      <text x="28" y="23" font-size="11" fill="#8A919C">現場</text>
+      <!-- camera cutout zone -->
+      <rect x="62" y="0" width="126" height="37" rx="18.5" fill="#000"/>
+      <text x="238" y="24" text-anchor="end" class="num"><tspan font-size="14" fill="#F5F7FA">12:34:56</tspan><tspan font-size="10.5" fill="#FFB020">.78</tspan></text>
+    </g>
+    <text x="30" y="170" class="note">左：補正状態（緑点）　右：現在時刻＋1/100秒</text>
+    <text x="30" y="192" class="note">カウントダウン中は右側が「−04:59.22」（黄/赤）になる</text>
+
+    <!-- minimal -->
+    <text x="620" y="40" class="h">② 最小（他アプリも島を使用中）</text>
+    <g transform="translate(620,64) scale(2)">
+      <rect width="126" height="37" rx="18.5" fill="#000"/>
+      <circle cx="146" cy="18.5" r="18.5" fill="#000"/>
+      <text x="146" y="22" text-anchor="middle" class="num" font-size="10" fill="#F5F7FA">:56</text>
+    </g>
+    <text x="620" y="170" class="note">丸い部分に「秒」だけ表示（幅が足りないため）</text>
+
+    <!-- expanded -->
+    <text x="30" y="232" class="h">③ 長押しで展開</text>
+    <g transform="translate(250,214)">
+      <rect width="740" height="100" rx="44" fill="#000"/>
+      <circle cx="44" cy="34" r="6" fill="#30D158"/>
+      <text x="58" y="39" font-size="14" fill="#7FD49A" class="num">NTP ±12ms</text>
+      <text x="370" y="64" text-anchor="middle" class="num"><tspan font-size="48" fill="#F5F7FA">12:34:56</tspan><tspan font-size="32" fill="#FFB020">.78</tspan></text>
+      <text x="700" y="34" text-anchor="end" font-size="13" fill="#8A919C">本番（サンプル）まで</text>
+      <text x="700" y="62" text-anchor="end" class="num" font-size="22" fill="#F5F7FA">−25:03</text>
+      <text x="370" y="90" text-anchor="middle" font-size="12" fill="#5A6270">タップでアプリを開く</text>
+    </g>
+  </g>
+
+  <!-- ===== Lock screen ===== -->
+  <g transform="translate(70,480)">
+    <text x="0" y="-14" class="h">④ ロック画面（Live Activity）</text>
+    <rect x="-12" y="0" width="417" height="740" rx="64" fill="#1A1C20"/>
+    <rect x="0" y="12" width="393" height="716" rx="54" fill="#1E2A3A"/>
+    <rect x="133" y="26" width="126" height="37" rx="18.5" fill="#000"/>
+    <text x="196.5" y="120" text-anchor="middle" font-size="16" fill="#DDE6F2">11月15日 日曜日</text>
+    <text x="196.5" y="210" text-anchor="middle" font-size="90" fill="#F5F7FA" font-weight="600" class="num">12:34</text>
+    <!-- banner -->
+    <g transform="translate(14,520)">
+      <rect width="365" height="150" rx="24" fill="#0B0D10" fill-opacity=".92"/>
+      <circle cx="26" cy="30" r="5" fill="#30D158"/>
+      <text x="38" y="35" font-size="13" fill="#8A919C">現場時計 ・ NTP ±12ms</text>
+      <text x="22" y="92" class="num"><tspan font-size="50" fill="#F5F7FA">12:34:56</tspan><tspan font-size="32" fill="#FFB020">.78</tspan></text>
+      <line x1="22" y1="110" x2="343" y2="110" stroke="#262A31"/>
+      <text x="22" y="136" font-size="14" fill="#8A919C">本番（サンプル）まで</text>
+      <text x="343" y="137" text-anchor="end" class="num" font-size="18" fill="#F5F7FA">−00:25:03</text>
+    </g>
+    <text x="0" y="770" class="note">画面消灯中は秒以下が止まる可能性 → その場合「--.--」</text>
+    <text x="0" y="792" class="note">ではなく「秒まで」表示に自動で切り替える案</text>
+  </g>
+
+  <!-- ===== PiP over another app ===== -->
+  <g transform="translate(560,480)">
+    <text x="0" y="-14" class="h">⑤ フローティング（他のアプリの上に小窓）</text>
+    <rect x="-12" y="0" width="417" height="740" rx="64" fill="#1A1C20"/>
+    <rect x="0" y="12" width="393" height="716" rx="54" fill="#FFFFFF"/>
+    <rect x="133" y="26" width="126" height="37" rx="18.5" fill="#000"/>
+    <!-- fake other app: cue sheet in a notes-like app -->
+    <text x="24" y="110" font-size="26" font-weight="700" fill="#111">進行表（サンプル）</text>
+    <g font-size="15" fill="#333">
+      <text x="24" y="150" class="num">12:30</text><text x="90" y="150">リハーサル開始</text>
+      <text x="24" y="182" class="num">12:45</text><text x="90" y="182">照明チェック</text>
+      <text x="24" y="214" class="num">13:00</text><text x="90" y="214" font-weight="700">本番</text>
+      <text x="24" y="246" class="num">13:20</text><text x="90" y="246">転換</text>
+      <text x="24" y="278" class="num">13:30</text><text x="90" y="278">第2部</text>
+    </g>
+    <g fill="#E3E6EA"><rect x="24" y="310" width="345" height="10" rx="5"/><rect x="24" y="332" width="300" height="10" rx="5"/><rect x="24" y="354" width="320" height="10" rx="5"/><rect x="24" y="376" width="260" height="10" rx="5"/></g>
+    <!-- PiP window -->
+    <g transform="translate(150,430)">
+      <rect x="0" y="4" width="230" height="130" rx="16" fill="#000" fill-opacity=".25"/>
+      <rect width="230" height="130" rx="16" fill="#0B0D10"/>
+      <circle cx="18" cy="20" r="4" fill="#30D158"/>
+      <text x="28" y="24" font-size="11" fill="#8A919C" class="num">±12ms</text>
+      <text x="115" y="76" text-anchor="middle" class="num"><tspan font-size="34" fill="#F5F7FA">12:34:56</tspan><tspan font-size="22" fill="#FFB020">.78</tspan></text>
+      <text x="115" y="108" text-anchor="middle" class="num" font-size="14" fill="#8A919C">本番まで −25:03.22</text>
+    </g>
+    <text x="0" y="770" class="note">ドラッグで移動、ピンチで拡大、端に寄せると隠せる（OS標準のPiP動作）</text>
+    <text x="0" y="792" class="note">中身は「時計を描いた映像」を1秒60コマで流して実現</text>
+  </g>
+
+  <!-- ===== Ideas side panel ===== -->
+  <g transform="translate(1030,480)">
+    <rect width="330" height="500" rx="20" fill="#F7F8FA" stroke="#D5DAE1"/>
+    <text x="24" y="40" class="h">表示内容の切替（設定）</text>
+    <g font-size="14" fill="#333">
+      <text x="24" y="78">● 時計のみ</text>
+      <text x="24" y="106">● 時計＋次のキュー</text>
+      <text x="24" y="134">● カウントダウンのみ（大）</text>
+      <text x="24" y="162">● ストップウォッチ</text>
+    </g>
+    <line x1="24" y1="190" x2="306" y2="190" stroke="#D5DAE1"/>
+    <text x="24" y="226" class="h">状態の色</text>
+    <g font-size="14" fill="#333">
+      <circle cx="32" cy="256" r="6" fill="#30D158"/><text x="48" y="261">補正済み（1時間以内）</text>
+      <circle cx="32" cy="286" r="6" fill="#FFD60A"/><text x="48" y="291">補正が古い／残り5分</text>
+      <circle cx="32" cy="316" r="6" fill="#FF453A"/><text x="48" y="321">未補正／残り1分</text>
+    </g>
+    <line x1="24" y1="350" x2="306" y2="350" stroke="#D5DAE1"/>
+    <text x="24" y="386" class="h">制約（事実）</text>
+    <g font-size="13" fill="#5A6270">
+      <text x="24" y="414">・島の表示は最長8時間でOSが終了</text>
+      <text x="24" y="438">・アプリから毎秒の更新は不可</text>
+      <text x="36" y="458">→ OSに数えさせる方式で回避</text>
+      <text x="24" y="482">・小窓は審査で却下の可能性あり</text>
+    </g>
+  </g>
+</svg>
