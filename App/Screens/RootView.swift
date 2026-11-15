@@ -48,7 +48,13 @@ struct RootView: View {
             model.applyScreenOn()
             if !didDecideStart {
                 didDecideStart = true
-                showsClockOnly = settings.startsInClockOnly
+                // 自動の画面写真用：-tab 0/1/2 で指定のタブを開く（時計だけモードは出さない）
+                let args = ProcessInfo.processInfo.arguments
+                if let i = args.firstIndex(of: "-tab"), i + 1 < args.count, let t = Int(args[i + 1]) {
+                    tab = t
+                } else {
+                    showsClockOnly = settings.startsInClockOnly
+                }
             }
         }
     }

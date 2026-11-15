@@ -13,7 +13,9 @@ final class PiPRenderer: @unchecked Sendable {
         var syncOK = false
     }
 
-    let layer = AVSampleBufferDisplayLayer()
+    let layer: AVSampleBufferDisplayLayer
+    /// 映像を流し込む先。layer は画面側（メインスレッド）の部品なので、作る時に取り出しておく
+    private let videoRenderer: AVSampleBufferVideoRenderer
     let size = CGSize(width: 720, height: 360)
 
     private let queue = DispatchQueue(label: "genba.pip.render", qos: .userInteractive)
@@ -22,9 +24,13 @@ final class PiPRenderer: @unchecked Sendable {
     private var timer: DispatchSourceTimer?
     private var pool: CVPixelBufferPool?
 
+    @MainActor
     init() {
+        let layer = AVSampleBufferDisplayLayer()
         layer.videoGravity = .resizeAspect
         layer.backgroundColor = UIColor.black.cgColor
+        self.layer = layer
+        videoRenderer = layer.sampleBufferRenderer
     }
 
     func update(_ s: Snapshot) { lock.withLock { snapshot = s } }
@@ -54,7 +60,7 @@ final class PiPRenderer: @unchecked Sendable {
         guard let buffer = makePixelBuffer() else { return }
         draw(s, into: buffer)
         guard let sample = makeSampleBuffer(buffer) else { return }
-        let renderer = layer.sampleBufferRenderer
+        let renderer = videoRenderer
         if renderer.status == .failed { renderer.flush() }
         if renderer.isReadyForMoreMediaData { renderer.enqueue(sample) }
     }

@@ -3,6 +3,10 @@ name: testflight
 
 on:
   workflow_dispatch:      # GitHub の Actions タブ／iPhone の GitHub アプリから手動実行
+    inputs:
+      whats_new:
+        description: "TestFlight アプリに出す「テストの内容」（空なら最新コミットの説明）"
+        required: false
   push:
     tags: ["v*"]          # v1.0.0 などのタグを push しても実行
 
@@ -18,6 +22,7 @@ jobs:
       scheme: GenbaTokei
       # Apple Watch アプリを同梱
       extra_sdks: watchOS
+      whats_new: ${{ inputs.whats_new }}
       # .xcodeproj はコミットせず、project.yml から毎回つくる
       pre_build: brew install xcodegen && xcodegen generate
       xcode: "27.2"
