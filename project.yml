@@ -28,6 +28,8 @@ targets:
       path: App/Info.plist
       properties:
         CFBundleDisplayName: 現場時計
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
         UIApplicationSupportsIndirectInputEvents: true
         UISupportedInterfaceOrientations:
@@ -59,6 +61,8 @@ targets:
       path: LiveActivity/Info.plist
       properties:
         CFBundleDisplayName: 現場時計
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
   GenbaTokeiTests:
