@@ -13,8 +13,13 @@ udid() { # 端末名 ランタイム（iOS-27-2 など）
     '.devices | to_entries[] | select(.key | endswith($rt)) | .value[] | select(.name==$n) | .udid' | head -1
 }
 
-prepare() { # UDID
+prepare() { # UDID（日本語・日本の地域に設定してから起動し直す）
   xcrun simctl boot "$1" || true
+  xcrun simctl bootstatus "$1" -b
+  xcrun simctl spawn "$1" defaults write -g AppleLanguages -array ja
+  xcrun simctl spawn "$1" defaults write -g AppleLocale ja_JP
+  xcrun simctl shutdown "$1" || true
+  xcrun simctl boot "$1"
   xcrun simctl bootstatus "$1" -b
   xcrun simctl status_bar "$1" override --time "9:41" --batteryState charged --batteryLevel 100 \
     --cellularMode active --cellularBars 4 --wifiBars 3 --operatorName "" 2>/dev/null || true
@@ -58,7 +63,6 @@ WBID="$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$WAPP/Info.plist"
 wid="$(udid "Apple Watch Ultra 4 (49mm)" "watchOS-${OS//./-}")"
 [ -n "$wid" ] || { echo "::error::Watch シミュレーターが無い"; exit 1; }
 mkdir -p "$OUT/APP_WATCH_ULTRA"
-xcrun simctl boot "$wid" || true
-xcrun simctl bootstatus "$wid" -b
+prepare "$wid"
 xcrun simctl install "$wid" "$WAPP"
 shoot "$wid" "$WBID" "$OUT/APP_WATCH_ULTRA/1.png" -demo
