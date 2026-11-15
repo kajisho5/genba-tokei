@@ -15,8 +15,7 @@
 Apple が API での作成を許していないため、Web の画面でしか作れない。
 
 1. https://appstoreconnect.apple.com/apps →左上「＋」→「新規 App」
-2. プラットフォーム：iOS ／ **バンドル ID は本体の `com.seventhwell.GenbaTokei` を選ぶ（`.LiveActivity` や `.watchkitapp` は同梱部品なので選ばない）**
-   ／ ／ 名前：`現場時計`（他人と重複したら `現場時計 試作` など）／ 言語：日本語 ／ バンドル ID：`com.seventhwell.GenbaTokei` を選ぶ ／ SKU：`genbatokei` ／ ユーザアクセス：フルアクセス →「作成」
+2. プラットフォーム：iOS ／ 名前：`現場時計`（他人と重複したら `現場時計 試作` など）／ 言語：日本語 ／ バンドル ID：`com.seventhwell.GenbaTokei` を選ぶ（**`.LiveActivity` や `.watchkitapp` で終わるものは同梱部品なので選ばない**）／ SKU：`genbatokei` ／ ユーザアクセス：フルアクセス →「作成」
 3. Claude に「作った」と伝える
 
 ## 6. 実機で確認
