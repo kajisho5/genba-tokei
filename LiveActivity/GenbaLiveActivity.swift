@@ -9,7 +9,6 @@ import WidgetKit
 struct LiveTimeText: View {
     let state: GenbaActivityAttributes.ContentState
     let size: CGFloat
-    /// 枠に合わせて文字を縮めるか（切り抜き表示の時は縮めない）
     var scales = true
 
     var body: some View {
@@ -74,30 +73,30 @@ struct SyncDot: View {
     }
 }
 
-/// 「:36.47」だけを見せる。OS の標準表示には「秒だけ」の形式がないので、
-/// 補正済みの時刻（時:分:秒.1/100）を描いて、右端の幅だけ切り抜く。
+/// 「:36.47」だけを見せる。OS 標準の日付の形式（Date.FormatStyle）で「秒」と「秒の小数」だけを指定し、
+/// OS に数えさせる（短いので島が狭いままになり、本体の時刻・電波・電池が隠れない）。
+/// 注意：この形式は時刻サーバーの補正（offset）をかけられないため、iPhone 本体の時計そのままになる。
 struct SecondsOnlyText: View {
     let state: GenbaActivityAttributes.ContentState
     let size: CGFloat
 
     var body: some View {
-        // 見本の文字で幅を決める（数字は等幅なので「:00.00」と同じ幅になる）
-        Text(template)
-            .font(.system(size: size, weight: .semibold).monospacedDigit())
-            .hidden()
-            .overlay(alignment: .trailing) {
-                LiveTimeText(state: state, size: size, scales: false)
-                    .fixedSize()
-            }
-            .clipped()
-            .accessibilityLabel("現在の秒")
+        HStack(spacing: 0) {
+            Text(":")
+            Text(TimeDataSource<Date>.currentDate, format: style)
+        }
+        .font(.system(size: size, weight: .semibold).monospacedDigit())
+        .foregroundStyle(Palette.text)
+        .lineLimit(1)
+        .accessibilityLabel("現在の秒")
     }
 
-    private var template: String {
+    private var style: Date.FormatStyle {
+        let base = Date.FormatStyle(locale: Locale(identifier: "ja_JP")).second(.twoDigits)
         switch state.precision {
-        case .centiseconds: ":00.00"
-        case .deciseconds: ":00.0"
-        case .seconds: ":00"
+        case .centiseconds: return base.secondFraction(.fractional(2))
+        case .deciseconds: return base.secondFraction(.fractional(1))
+        case .seconds: return base
         }
     }
 }
