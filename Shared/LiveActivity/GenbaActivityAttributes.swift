@@ -20,6 +20,8 @@ struct GenbaActivityAttributes: ActivityAttributes {
         var precision: DisplayPrecision
         /// NTP の誤差（ミリ秒）。未補正なら nil
         var accuracyMs: Int?
+        /// true：Dynamic Island の左側だけに出す（右の電池・電波を隠さない）
+        var leadingOnly: Bool?
     }
 }
 #endif
