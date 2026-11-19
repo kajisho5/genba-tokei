@@ -61,7 +61,8 @@ final class TimerStore {
             guard !Task.isCancelled else { return }
             self?.fireZero()
         }
-        // アプリが閉じている時：通知（音つき）
+        // アプリが閉じている時：通知（音つき）。画面写真の見本モードでは許可を求めない（ダイアログが写るため）
+        guard !TimeSyncStore.isDemo else { return }
         let content = UNMutableNotificationContent()
         content.title = "\(countdown.label)の時間です"
         content.body = "カウントダウンが 0 になりました"

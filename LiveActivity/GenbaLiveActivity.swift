@@ -88,7 +88,21 @@ struct SecondsOnlyText: View {
         .font(.system(size: size, weight: .semibold).monospacedDigit())
         .foregroundStyle(Palette.text)
         .lineLimit(1)
+        .minimumScaleFactor(0.8)
+        // OS が数える文字は「取りうる一番長い表示」の幅を確保してしまい、島が広がる。
+        // 実際の文字数（「:36.47」なら 6 文字）に合わせて幅を固定する
+        .frame(width: width, alignment: .trailing)
         .accessibilityLabel("現在の秒")
+    }
+
+    /// 等幅数字の幅 ≒ 文字の大きさ×0.62、「:」「.」≒ ×0.3 で見積もり、少し余裕をもたせる
+    private var width: CGFloat {
+        let digit = size * 0.62, mark = size * 0.3
+        switch state.precision {
+        case .centiseconds: return (digit * 4 + mark * 2).rounded(.up) + 2
+        case .deciseconds: return (digit * 3 + mark * 2).rounded(.up) + 2
+        case .seconds: return (digit * 2 + mark).rounded(.up) + 2
+        }
     }
 
     private var style: Date.FormatStyle {

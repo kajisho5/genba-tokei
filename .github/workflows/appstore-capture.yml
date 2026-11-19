@@ -1,0 +1,28 @@
+# App Store 用の素材（画面写真・説明動画の元）を撮る。仕上げ（文字入れ・動画の規格合わせ）は scripts/store-compose.py
+name: appstore-capture
+
+on:
+  workflow_dispatch:
+
+# 新しい変更が来たら、古い撮影は止める（Mac の実行時間の節約）
+concurrency:
+  group: appstore-capture-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: xcode-27
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - name: 準備（Xcode 選択・プロジェクト生成）
+        run: ci/setup.sh
+      - name: 画面写真と動画を撮る
+        run: ci/appstore-capture.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: appstore-capture
+          path: capture

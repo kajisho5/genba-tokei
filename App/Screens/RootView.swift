@@ -44,6 +44,22 @@ struct RootView: View {
                 .environment(model.sync)
                 .environment(model.settings)
         }
+        .task {
+            // App プレビュー（説明動画）の録画用（起動引数 -tour）：画面を順に自動で切り替える
+            guard ProcessInfo.processInfo.arguments.contains("-tour") else { return }
+            // 最初の 15 秒は時計だけモードで待つ（CI のシミュレーターは起動直後の画面の更新が遅いため）。
+            // 録画の仕上げ（scripts/store-compose.py）はこの 15 秒を切り落とす
+            showsClockOnly = true
+            try? await Task.sleep(for: .seconds(15))
+            let steps: [(clockOnly: Bool, tab: Int, seconds: Double)] = [
+                (true, 0, 7), (false, 0, 6), (false, 1, 6), (false, 2, 6), (true, 0, 4),
+            ]
+            for step in steps {
+                showsClockOnly = step.clockOnly
+                tab = step.tab
+                try? await Task.sleep(for: .seconds(step.seconds))
+            }
+        }
         .onAppear {
             model.applyScreenOn()
             if !didDecideStart {
